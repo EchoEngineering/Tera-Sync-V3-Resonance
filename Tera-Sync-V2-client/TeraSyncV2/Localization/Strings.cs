@@ -9,35 +9,35 @@ public static class Strings
     public class ToSStrings
     {
         public readonly string AgreeLabel = Loc.Localize("AgreeLabel", "I agree");
-        public readonly string AgreementLabel = Loc.Localize("AgreementLabel", "Agreement of Usage of Service");
+        public readonly string AgreementLabel = Loc.Localize("AgreementLabel", "Terms of Service");
         public readonly string ButtonWillBeAvailableIn = Loc.Localize("ButtonWillBeAvailableIn", "'I agree' button will be available in");
         public readonly string LanguageLabel = Loc.Localize("LanguageLabel", "Language");
 
         public readonly string Paragraph1 = Loc.Localize("Paragraph1",
-            "All of the mod files currently active on your character as well as your current character state will be uploaded to the service you registered yourself at automatically. " +
-            "The plugin will exclusively upload the necessary mod files and not the whole mod.");
+            "Hey! Just so you know, when you use TeraSync, your active mods and character appearance get uploaded to the server automatically. " +
+            "Don't worry though - I only upload the files that are actually being used, not your entire mod collection.");
 
         public readonly string Paragraph2 = Loc.Localize("Paragraph2",
-            "If you are on a data capped internet connection, higher fees due to data usage depending on the amount of downloaded and uploaded mod files might occur. " +
-            "Mod files will be compressed on up- and download to save on bandwidth usage. Due to varying up- and download speeds, changes in characters might not be visible immediately. " +
-            "Files present on the service that already represent your active mod files will not be uploaded again.");
+            "Quick heads up about data usage - if you're on a limited internet plan, syncing mods might eat into your data cap. " +
+            "I compress everything to save bandwidth, but depending on your connection speed, changes might take a moment to show up. " +
+            "The good news? Files you've already uploaded won't be uploaded again.");
 
         public readonly string Paragraph3 = Loc.Localize("Paragraph3",
-            "The mod files you are uploading are confidential and will not be distributed to parties other than the ones who are requesting the exact same mod files. " +
-            "Please think about who you are going to pair since it is unavoidable that they will receive and locally cache the necessary mod files that you have currently in use. " +
-            "Locally cached mod files will have arbitrary file names to discourage attempts at replicating the original mod.");
+            "Your mods stay private - they're only shared with people who are syncing with you directly. " +
+            "Be mindful about who you sync with, because they'll download and cache your active mods locally. " +
+            "To protect mod creators, cached files get randomized names so they're harder to redistribute.");
 
         public readonly string Paragraph4 = Loc.Localize("Paragraph4",
-            "The plugin creator tried their best to keep you secure. However, there is no guarantee for 100% security. Do not blindly pair your client with everyone.");
+            "I've done my best to keep everything secure, but let's be real - nothing on the internet is 100% safe. Use common sense and don't sync with random people you don't trust.");
 
         public readonly string Paragraph5 = Loc.Localize("Paragraph5",
-            "Mod files that are saved on the service will remain on the service as long as there are requests for the files from clients. " +
-            "After a period of not being used, the mod files will be automatically deleted. " +
-            "You will also be able to wipe all the files you have personally uploaded on request. " +
-            "The service holds no information about which mod files belong to which mod.");
+            "Your uploaded files stick around on the server as long as someone's using them. " +
+            "Unused files get automatically cleaned up after a while to save space. " +
+            "Want to delete everything you've uploaded? You can wipe your data anytime. " +
+            "Oh, and the server doesn't track which files belong to which mods - it's all anonymous.");
 
         public readonly string Paragraph6 = Loc.Localize("Paragraph6",
-            "This service is provided as-is. In case of abuse, open an issue on github.");
+            "That's about it! This service is provided as-is. If you run into issues or see someone abusing the system, hit me up on GitHub.");
 
         public readonly string ReadLabel = Loc.Localize("ReadLabel", "READ THIS CAREFULLY");
     }
