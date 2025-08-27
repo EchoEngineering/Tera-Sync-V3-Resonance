@@ -150,4 +150,4 @@ This plugin is not affiliated with Square Enix. Use at your own risk. Always bac
 
 ---
 
-**Made with ❤️ by the Kirin XIV team**
+**Made with ❤️ by kirin-xiv**
