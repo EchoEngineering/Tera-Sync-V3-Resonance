@@ -39,15 +39,7 @@ public sealed class CommandManagerService : IDisposable
         _teraSyncConfigService = teraConfigService;
         var commandInfo = new CommandInfo(OnCommand)
         {
-            HelpMessage = "Opens the Tera Sync V2 UI" + Environment.NewLine + Environment.NewLine +
-                "Available commands: /tera, /ts, /terasync, /sync" + Environment.NewLine +
-                "Available options:" + Environment.NewLine +
-                "\t toggle - Disconnects from Tera Sync V2, if connected. Connects to Tera Sync V2, if disconnected" + Environment.NewLine +
-                "\t toggle on|off - Connects or disconnects to Tera Sync V2 respectively" + Environment.NewLine +
-                "\t gpose - Opens the Tera Sync V2 Character Data Hub window" + Environment.NewLine +
-                "\t analyze - Opens the Tera Sync V2 Character Data Analysis window" + Environment.NewLine +
-                "\t settings - Opens the Tera Sync V2 Settings window" + Environment.NewLine +
-                "\t rescan - Rescans cache files"
+            HelpMessage = "Commands: /tera, /ts, /terasync, /sync"
         };
 
         _commandManager.AddHandler(_commandName, commandInfo);
