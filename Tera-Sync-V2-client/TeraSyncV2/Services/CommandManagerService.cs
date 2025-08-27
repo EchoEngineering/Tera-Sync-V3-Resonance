@@ -14,6 +14,9 @@ namespace TeraSyncV2.Services;
 public sealed class CommandManagerService : IDisposable
 {
     private const string _commandName = "/sync";
+    private const string _commandNameTera = "/tera";
+    private const string _commandNameTs = "/ts";
+    private const string _commandNameTeraSync = "/terasync";
 
     private readonly ApiController _apiController;
     private readonly ICommandManager _commandManager;
@@ -34,21 +37,31 @@ public sealed class CommandManagerService : IDisposable
         _apiController = apiController;
         _mediator = mediator;
         _teraSyncConfigService = teraConfigService;
-        _commandManager.AddHandler(_commandName, new CommandInfo(OnCommand)
+        var commandInfo = new CommandInfo(OnCommand)
         {
             HelpMessage = "Opens the Tera Sync V2 UI" + Environment.NewLine + Environment.NewLine +
-                "Additionally possible commands:" + Environment.NewLine +
-                "\t /sync toggle - Disconnects from Tera Sync V2, if connected. Connects to Tera Sync V2, if disconnected" + Environment.NewLine +
-                "\t /sync toggle on|off - Connects or disconnects to Tera Sync V2 respectively" + Environment.NewLine +
-                "\t /sync gpose - Opens the Tera Sync V2 Character Data Hub window" + Environment.NewLine +
-                "\t /sync analyze - Opens the Tera Sync V2 Character Data Analysis window" + Environment.NewLine +
-                "\t /sync settings - Opens the Tera Sync V2 Settings window"
-        });
+                "Available commands: /tera, /ts, /terasync, /sync" + Environment.NewLine +
+                "Available options:" + Environment.NewLine +
+                "\t toggle - Disconnects from Tera Sync V2, if connected. Connects to Tera Sync V2, if disconnected" + Environment.NewLine +
+                "\t toggle on|off - Connects or disconnects to Tera Sync V2 respectively" + Environment.NewLine +
+                "\t gpose - Opens the Tera Sync V2 Character Data Hub window" + Environment.NewLine +
+                "\t analyze - Opens the Tera Sync V2 Character Data Analysis window" + Environment.NewLine +
+                "\t settings - Opens the Tera Sync V2 Settings window" + Environment.NewLine +
+                "\t rescan - Rescans cache files"
+        };
+
+        _commandManager.AddHandler(_commandName, commandInfo);
+        _commandManager.AddHandler(_commandNameTera, commandInfo);
+        _commandManager.AddHandler(_commandNameTs, commandInfo);
+        _commandManager.AddHandler(_commandNameTeraSync, commandInfo);
     }
 
     public void Dispose()
     {
         _commandManager.RemoveHandler(_commandName);
+        _commandManager.RemoveHandler(_commandNameTera);
+        _commandManager.RemoveHandler(_commandNameTs);
+        _commandManager.RemoveHandler(_commandNameTeraSync);
     }
 
     private void OnCommand(string command, string args)
