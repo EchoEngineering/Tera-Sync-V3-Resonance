@@ -21,8 +21,8 @@ namespace TeraSyncV2.WebAPI;
 #pragma warning disable MA0040
 public sealed partial class ApiController : DisposableMediatorSubscriberBase, ITeraHubClient
 {
-    public const string MainServer = "Localhost";
-    public const string MainServiceUri = "ws://localhost:80";
+    public const string MainServer = "TeraSyncV2";
+    public const string MainServiceUri = "wss://tera.terasync.app";
 
     private readonly DalamudUtilService _dalamudUtil;
     private readonly HubFactory _hubFactory;
