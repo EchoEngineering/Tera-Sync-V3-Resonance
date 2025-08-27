@@ -1,0 +1,32 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 as BUILD
+
+COPY TeraAPI /server/TeraAPI
+COPY TeraSyncServer/TeraSyncShared /server/TeraSyncServer/TeraSyncShared
+COPY TeraSyncServer/TeraSyncMainServer /server/TeraSyncServer/TeraSyncMainServer
+
+WORKDIR /server/TeraSyncServer/TeraSyncMainServer/
+
+RUN dotnet publish \
+        --configuration=Release \
+        --os=linux \
+        --output=/build \
+        TeraSyncMainServer.csproj
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+
+RUN adduser \
+        --disabled-password \
+        --group \
+        --no-create-home \
+        --quiet \
+        --system \
+        terasync
+
+COPY --from=BUILD /build /opt/TeraSyncV2Server
+RUN chown -R terasync:terasync /opt/TeraSyncV2Server
+RUN apt-get update; apt-get install curl -y
+
+USER terasync:terasync
+WORKDIR /opt/TeraSyncV2Server
+
+CMD ["./TeraSyncMainServer"]

@@ -3,6 +3,8 @@
 **/obj/
 **/out/
 **/build/
+# Exception: Keep Docker build scripts
+!Tera-Sync-V2-server/Docker/build/
 
 # Docker
 *.tar

@@ -1,0 +1,31 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 as BUILD
+
+COPY TeraAPI /server/TeraAPI
+COPY TeraSyncServer/TeraSyncShared /server/TeraSyncServer/TeraSyncShared
+COPY TeraSyncServer/TeraSyncAuthService /server/TeraSyncServer/TeraSyncAuthService
+
+WORKDIR /server/TeraSyncServer/TeraSyncAuthService/
+
+RUN dotnet publish \
+        --configuration=Release \
+        --os=linux \
+        --output=/build \
+        TeraSyncAuthService.csproj
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+
+RUN adduser \
+        --disabled-password \
+        --group \
+        --no-create-home \
+        --quiet \
+        --system \
+        terasync
+
+COPY --from=BUILD /build /opt/TeraSyncV2AuthService
+RUN chown -R terasync:terasync /opt/TeraSyncV2AuthService
+
+USER terasync:terasync
+WORKDIR /opt/TeraSyncV2AuthService
+
+CMD ["./TeraSyncAuthService"]
