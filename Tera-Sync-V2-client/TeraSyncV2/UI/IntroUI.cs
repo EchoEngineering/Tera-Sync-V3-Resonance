@@ -290,8 +290,13 @@ public partial class IntroUi : WindowMediatorSubscriberBase
             {
                 if (string.IsNullOrEmpty(selectedServer.OAuthToken))
                 {
-                    UiSharedService.TextWrapped("Before authenticating, you must first register with the TeraSync Discord bot to create your account. " +
-                        "Join our Discord server and use the bot commands to set up your account - this links your Discord ID to a TeraSync user.");
+                    UiSharedService.TextWrapped("Before authenticating, you must complete these steps IN ORDER:");
+                    UiSharedService.TextWrapped("1. Join our Discord server using the button below");
+                    UiSharedService.TextWrapped("2. Get the 'Tera Sync user' role (Authorized users only)");
+                    UiSharedService.TextWrapped("3. Go to #tera-sync-authentication channel");
+                    UiSharedService.TextWrapped("4. Engage with the bot and follow the registration process");
+                    UiSharedService.TextWrapped("5. Come back here and click 'Check if Server supports Discord OAuth2'");
+                    UiSharedService.TextWrapped("6. Finally click 'Authenticate with Server'");
                     
                     // Discord button for easy access
                     ImGui.Spacing();
@@ -300,8 +305,6 @@ public partial class IntroUi : WindowMediatorSubscriberBase
                         Util.OpenLink("https://discord.gg/kWVeUZ62SR");
                     }
                     ImGui.Spacing();
-                    
-                    UiSharedService.TextWrapped("Once you've registered with the bot, come back here and click the button below to authenticate with Discord. It's quick and secure!");
                     _uiShared.DrawOAuth(selectedServer);
                 }
                 else
