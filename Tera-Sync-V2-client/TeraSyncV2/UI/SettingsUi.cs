@@ -1943,7 +1943,12 @@ public class SettingsUi : WindowMediatorSubscriberBase
         ImGui.SameLine();
         if (ImGui.Button("Tera Sync Discord"))
         {
-            Util.OpenLink("https://discord.gg/DCtCC5wS");
+            Util.OpenLink("https://discord.gg/kWVeUZ62SR");
+        }
+        ImGui.SameLine();
+        if (_uiShared.IconTextButton(FontAwesomeIcon.Coffee, "Tip Jar"))
+        {
+            Util.OpenLink("https://ko-fi.com/kirinxiv");
         }
         ImGui.Separator();
         if (ImGui.BeginTabBar("mainTabBar"))

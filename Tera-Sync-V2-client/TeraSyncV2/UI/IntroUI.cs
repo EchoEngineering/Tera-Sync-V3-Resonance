@@ -168,13 +168,13 @@ public partial class IntroUi : WindowMediatorSubscriberBase
             }
             else
             {
-                UiSharedService.TextWrapped("To not unnecessary download files already present on your computer, Tera Sync will have to scan your Penumbra mod directory. " +
-                                     "Additionally, a local storage folder must be set where Synchronos will download other character files to. " +
-                                     "Once the storage folder is set and the scan complete, this page will automatically forward to registration at a service.");
-                UiSharedService.TextWrapped("Note: The initial scan, depending on the amount of mods you have, might take a while. Please wait until it is completed.");
-                UiSharedService.ColorTextWrapped("Warning: once past this step you should not delete the FileCache.csv of Tera Sync in the Plugin Configurations folder of Dalamud. " +
-                                          "Otherwise on the next launch a full re-scan of the file cache database will be initiated.", ImGuiColors.DalamudYellow);
-                UiSharedService.ColorTextWrapped("Warning: if the scan is hanging and does nothing for a long time, chances are high your Penumbra folder is not set up properly.", ImGuiColors.DalamudYellow);
+                UiSharedService.TextWrapped("To avoid downloading files you already have, TeraSync needs to scan your Penumbra mod directory first. " +
+                                     "You'll also need to choose a folder where TeraSync can store downloaded character files from other players. " +
+                                     "Once you've set the storage folder and the scan is complete, you'll automatically move on to the service registration.");
+                UiSharedService.TextWrapped("Note: The initial scan might take a while if you have a lot of mods. Please be patient and let it finish.");
+                UiSharedService.ColorTextWrapped("Warning: After this step, don't delete the FileCache.csv file in your Dalamud Plugin Configurations folder. " +
+                                          "If you do, TeraSync will have to rescan your entire mod collection next time you launch it.", ImGuiColors.DalamudYellow);
+                UiSharedService.ColorTextWrapped("Warning: If the scan seems stuck for a long time, your Penumbra folder might not be configured correctly.", ImGuiColors.DalamudYellow);
                 _uiShared.DrawCacheDirectorySetting();
             }
 
@@ -197,8 +197,8 @@ public partial class IntroUi : WindowMediatorSubscriberBase
                     _configService.Current.UseCompactor = useFileCompactor;
                     _configService.Save();
                 }
-                UiSharedService.ColorTextWrapped("The File Compactor can save a tremendeous amount of space on the hard disk for downloads through Tera Sync V2. It will incur a minor CPU penalty on download but can speed up " +
-                    "loading of other characters. It is recommended to keep it enabled. You can change this setting later anytime in the Tera Sync V2 settings.", ImGuiColors.DalamudYellow);
+                UiSharedService.ColorTextWrapped("The File Compactor can save a lot of disk space for downloaded files. It uses a bit more CPU when downloading, but makes loading other characters faster. " +
+                    "I recommend keeping it enabled. You can always change this in the settings later.", ImGuiColors.DalamudYellow);
             }
         }
         else if (!_uiShared.ApiController.ServerAlive)
@@ -239,9 +239,9 @@ public partial class IntroUi : WindowMediatorSubscriberBase
                 var textSize = ImGui.CalcTextSize(text);
 
                 ImGuiHelpers.ScaledDummy(5);
-                UiSharedService.DrawGroupedCenteredColorText("Strongly consider to use OAuth2 to authenticate, if the server supports it (the current main server does). " +
-                    "The authentication flow is simpler and you do not require to store or maintain Secret Keys. " +
-                    "You already implicitly register using Discord, so the OAuth2 method will be cleaner and more straight-forward to use.", ImGuiColors.DalamudYellow, 500);
+                UiSharedService.DrawGroupedCenteredColorText("PLEASE USE DISCORD OAUTH! It's way more secure and you won't have to deal with managing secret keys. " +
+                    "Yes, it's a bit annoying to set up the first time, but it's worth it. The main server fully supports it. " +
+                    "If you need help with OAuth setup, come ask us on Discord - we're happy to help!", ImGuiColors.DalamudYellow, 500);
                 ImGuiHelpers.ScaledDummy(5);
 
                 ImGui.AlignTextToFramePadding();
@@ -251,11 +251,11 @@ public partial class IntroUi : WindowMediatorSubscriberBase
                 ImGui.InputText("", ref _secretKey, 64);
                 if (_secretKey.Length > 0 && _secretKey.Length != 64)
                 {
-                    UiSharedService.ColorTextWrapped("Your secret key must be exactly 64 characters long. Don't enter your Lodestone auth here.", ImGuiColors.DalamudRed);
+                    UiSharedService.ColorTextWrapped("Your secret key must be exactly 64 characters long. This isn't your Lodestone login!", ImGuiColors.DalamudRed);
                 }
                 else if (_secretKey.Length == 64 && !HexRegex().IsMatch(_secretKey))
                 {
-                    UiSharedService.ColorTextWrapped("Your secret key can only contain ABCDEF and the numbers 0-9.", ImGuiColors.DalamudRed);
+                    UiSharedService.ColorTextWrapped("Your secret key can only contain the letters A-F and numbers 0-9.", ImGuiColors.DalamudRed);
                 }
                 else if (_secretKey.Length == 64)
                 {
@@ -289,18 +289,18 @@ public partial class IntroUi : WindowMediatorSubscriberBase
             {
                 if (string.IsNullOrEmpty(selectedServer.OAuthToken))
                 {
-                    UiSharedService.TextWrapped("Press the button below to verify the server has OAuth2 capabilities. Afterwards, authenticate using Discord in the Browser window.");
+                    UiSharedService.TextWrapped("Click the button below to verify OAuth2 support, then authenticate with Discord in your browser. It's quick and secure!");
                     _uiShared.DrawOAuth(selectedServer);
                 }
                 else
                 {
                     UiSharedService.ColorTextWrapped($"OAuth2 is connected. Linked to: Discord User {_serverConfigurationManager.GetDiscordUserFromToken(selectedServer)}", ImGuiColors.HealerGreen);
-                    UiSharedService.TextWrapped("Now press the update UIDs button to get a list of all of your UIDs on the server.");
+                    UiSharedService.TextWrapped("Now click 'Update UIDs' to fetch all your characters from the server.");
                     _uiShared.DrawUpdateOAuthUIDsButton(selectedServer);
                     var playerName = _dalamudUtilService.GetPlayerName();
                     var playerWorld = _dalamudUtilService.GetHomeWorldId();
-                    UiSharedService.TextWrapped($"Once pressed, select the UID you want to use for your current character {_dalamudUtilService.GetPlayerName()}. If no UIDs are visible, make sure you are connected to the correct Discord account. " +
-                        $"If that is not the case, use the unlink button below (hold CTRL to unlink).");
+                    UiSharedService.TextWrapped($"Select which UID you want to use for {_dalamudUtilService.GetPlayerName()}. If you don't see any UIDs, make sure you're logged into the right Discord account. " +
+                        $"Need to switch accounts? Hold CTRL and click the unlink button below.");
                     _uiShared.DrawUnlinkOAuthButton(selectedServer);
 
                     var auth = selectedServer.Authentications.Find(a => string.Equals(a.CharacterName, playerName, StringComparison.Ordinal) && a.WorldId == playerWorld);

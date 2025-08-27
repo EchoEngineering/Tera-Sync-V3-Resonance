@@ -184,6 +184,24 @@ public class CompactUi : WindowMediatorSubscriberBase
             ImGui.Separator();
         }
 
+        // Community and Support buttons
+        var discordButtonSize = _uiSharedService.GetIconTextButtonSize(FontAwesomeIcon.Comments, "Discord");
+        var kofiButtonSize = _uiSharedService.GetIconTextButtonSize(FontAwesomeIcon.Coffee, "Tip Jar");
+        var totalButtonWidth = discordButtonSize + kofiButtonSize + ImGui.GetStyle().ItemSpacing.X;
+        ImGui.SetCursorPosX((ImGui.GetWindowContentRegionMax().X - ImGui.GetWindowContentRegionMin().X) / 2 - (totalButtonWidth / 2));
+        
+        if (_uiSharedService.IconTextButton(FontAwesomeIcon.Comments, "Discord"))
+        {
+            Util.OpenLink("https://discord.gg/kWVeUZ62SR");
+        }
+        ImGui.SameLine();
+        if (_uiSharedService.IconTextButton(FontAwesomeIcon.Coffee, "Tip Jar"))
+        {
+            Util.OpenLink("https://ko-fi.com/kirinxiv");
+        }
+        
+        ImGui.Separator();
+        
         using (ImRaii.PushId("header")) DrawUIDHeader();
         ImGui.Separator();
         using (ImRaii.PushId("serverstatus")) DrawServerStatus();
