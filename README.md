@@ -136,7 +136,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Penumbra Team** - Mod framework integration
 - **Glamourer Team** - Character customization APIs
 - **FFXIV Community** - Testing and feedback
-
+- **[opensynchronos](https://github.com/opensynchronos)** - Providing up to date Mare source code
+https://github.com/opensynchronos
 ## 🔗 Links
 
 - **Discord**: [Join our server](https://discord.gg/your-invite)
@@ -146,8 +147,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## ⚠️ Disclaimer
 
-This plugin is not affiliated with Square Enix. Use at your own risk. Always backup your character data before using synchronization features.
-
----
-
-**Made with ❤️ by the Kirin XIV team**
+This plugin is not affiliated with Square Enix. Use at your own risk.
