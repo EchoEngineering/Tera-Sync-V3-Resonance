@@ -136,7 +136,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Penumbra Team** - Mod framework integration
 - **Glamourer Team** - Character customization APIs
 - **FFXIV Community** - Testing and feedback
-
+- **[FFXIV Community](https://github.com/opensynchronos)** - Providing up to date Mare source code
+https://github.com/opensynchronos
 ## 🔗 Links
 
 - **Discord**: [Join our server](https://discord.gg/your-invite)
