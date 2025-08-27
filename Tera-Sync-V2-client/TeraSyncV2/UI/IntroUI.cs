@@ -1,4 +1,5 @@
 ﻿using Dalamud.Bindings.ImGui;
+using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
@@ -289,7 +290,18 @@ public partial class IntroUi : WindowMediatorSubscriberBase
             {
                 if (string.IsNullOrEmpty(selectedServer.OAuthToken))
                 {
-                    UiSharedService.TextWrapped("Click the button below to verify OAuth2 support, then authenticate with Discord in your browser. It's quick and secure!");
+                    UiSharedService.TextWrapped("Before authenticating, you must first register with the TeraSync Discord bot to create your account. " +
+                        "Join our Discord server and use the bot commands to set up your account - this links your Discord ID to a TeraSync user.");
+                    
+                    // Discord button for easy access
+                    ImGui.Spacing();
+                    if (_uiShared.IconTextButton(FontAwesomeIcon.Comments, "Join Discord Server"))
+                    {
+                        Util.OpenLink("https://discord.gg/kWVeUZ62SR");
+                    }
+                    ImGui.Spacing();
+                    
+                    UiSharedService.TextWrapped("Once you've registered with the bot, come back here and click the button below to authenticate with Discord. It's quick and secure!");
                     _uiShared.DrawOAuth(selectedServer);
                 }
                 else
