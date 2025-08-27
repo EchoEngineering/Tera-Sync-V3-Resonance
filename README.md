@@ -147,4 +147,4 @@ https://github.com/opensynchronos
 
 ## ⚠️ Disclaimer
 
-This plugin is not affiliated with Square Enix. Use at your own risk. Always backup your character data before using synchronization features.
+This plugin is not affiliated with Square Enix. Use at your own risk.
