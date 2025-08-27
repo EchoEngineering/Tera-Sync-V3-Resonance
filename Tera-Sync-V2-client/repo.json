@@ -5,7 +5,7 @@
     "Description": "Share your appearance, mods, and glamour configurations with friends. Synchronize your Penumbra and Glamourer state seamlessly.\n\nCommands:\n• /tera, /ts, /terasync, or /sync - Opens TeraSyncV2 UI\n• /tera toggle [on/off] - Toggle synchronization\n• /tera gpose - Open character data hub for group posing\n• /tera rescan - Rescan mod cache\n• /tera perf [seconds] - Show performance statistics\n• /tera analyze - Open data analysis UI\n• /tera settings - Open settings window\n\nFeatures:\n• Real-time appearance and mod synchronization\n• Penumbra and Glamourer integration\n• Group pose collaboration tools\n• Performance monitoring\n• Character data analysis",
     "Punchline": "Sync with friends - share your style.",
     "InternalName": "TeraSyncV2",
-    "AssemblyVersion": "1.0.0.1",
+    "AssemblyVersion": "1.0.0.2",
     "RepoUrl": "https://github.com/EchoEngineering/Tera-Sync-V2",
     "ApplicableVersion": "any",
     "Tags": [
