@@ -1,0 +1,70 @@
+﻿using TeraSyncV2.API.Data;
+using TeraSyncV2.API.Data.Enum;
+using TeraSyncV2.FileCache;
+using System.Text;
+using System.Text.Json;
+
+namespace TeraSyncV2.Services.CharaData.Models;
+
+public record TeraCharaFileData
+{
+    public string Description { get; set; } = string.Empty;
+    public string GlamourerData { get; set; } = string.Empty;
+    public string CustomizePlusData { get; set; } = string.Empty;
+    public string ManipulationData { get; set; } = string.Empty;
+    public List<FileData> Files { get; set; } = [];
+    public List<FileSwap> FileSwaps { get; set; } = [];
+
+    public TeraCharaFileData() { }
+    public TeraCharaFileData(FileCacheManager manager, string description, CharacterData dto)
+    {
+        Description = description;
+
+        if (dto.GlamourerData.TryGetValue(ObjectKind.Player, out var glamourerData))
+        {
+            GlamourerData = glamourerData;
+        }
+
+        dto.CustomizePlusData.TryGetValue(ObjectKind.Player, out var customizePlusData);
+        CustomizePlusData = customizePlusData ?? string.Empty;
+        ManipulationData = dto.ManipulationData;
+
+        if (dto.FileReplacements.TryGetValue(ObjectKind.Player, out var fileReplacements))
+        {
+            var grouped = fileReplacements.GroupBy(f => f.Hash, StringComparer.OrdinalIgnoreCase);
+
+            foreach (var file in grouped)
+            {
+                if (string.IsNullOrEmpty(file.Key))
+                {
+                    foreach (var item in file)
+                    {
+                        FileSwaps.Add(new FileSwap(item.GamePaths, item.FileSwapPath));
+                    }
+                }
+                else
+                {
+                    var filePath = manager.GetFileCacheByHash(file.First().Hash)?.ResolvedFilepath;
+                    if (filePath != null)
+                    {
+                        Files.Add(new FileData(file.SelectMany(f => f.GamePaths), (int)new FileInfo(filePath).Length, file.First().Hash));
+                    }
+                }
+            }
+        }
+    }
+
+    public byte[] ToByteArray()
+    {
+        return Encoding.UTF8.GetBytes(JsonSerializer.Serialize(this));
+    }
+
+    public static TeraCharaFileData FromByteArray(byte[] data)
+    {
+        return JsonSerializer.Deserialize<TeraCharaFileData>(Encoding.UTF8.GetString(data))!;
+    }
+
+    public record FileSwap(IEnumerable<string> GamePaths, string FileSwapPath);
+
+    public record FileData(IEnumerable<string> GamePaths, int Length, string Hash);
+}

@@ -1,0 +1,3 @@
+[submodule "OpenAPI"]
+	path = OpenAPI
+	url = https://github.com/opensynchronos/opensynchronos-api.git

@@ -1,0 +1,18 @@
+{
+  "Author": "kirin-xiv",
+  "Name": "Tera Sync V2",
+  "Punchline": "Sync with friends - share your style.",
+  "Description": "Share your appearance, mods, and glamour configurations with friends. Synchronize your Penumbra and Glamourer state seamlessly.",
+  "InternalName": "TeraSyncV2",
+  "ApplicableVersion": "any",
+  "Tags": [
+    "customization",
+    "penumbra",
+    "glamourer",
+    "synchronization",
+    "appearance",
+    "mods",
+    "sharing",
+    "social"
+  ]
+}
