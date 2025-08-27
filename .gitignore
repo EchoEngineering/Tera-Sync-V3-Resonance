@@ -1,0 +1,89 @@
+# Build Outputs
+**/bin/
+**/obj/
+**/out/
+**/build/
+
+# Docker
+*.tar
+*.tar.gz
+terasync-*.tar.gz
+
+# Logs
+**/logs/
+*.log
+
+# Configuration - DO NOT commit secrets
+**/.env
+**/appsettings.Production.json
+**/appsettings.Staging.json
+
+# Database
+**/data/
+*.db
+*.sqlite
+
+# Cache
+**/cache/
+**/teracache/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# JetBrains
+.idea/
+*.sln.iml
+
+# Visual Studio Code
+.vscode/
+
+# OS Generated
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Node.js (if any frontend components)
+node_modules/
+npm-debug.log*
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# Package files
+*.nupkg
+*.snupkg
+
+# Test Results
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# IDE specific
+*.swp
+*.swo
+
+# Docker volumes
+**/postgresql/
+**/redis/
+
+# Runtime secrets
+jwt-secret.txt
+discord-token.txt
+xivapi-key.txt
