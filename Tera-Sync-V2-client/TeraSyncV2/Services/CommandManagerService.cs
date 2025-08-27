@@ -13,10 +13,8 @@ namespace TeraSyncV2.Services;
 
 public sealed class CommandManagerService : IDisposable
 {
-    private const string _commandName = "/sync";
     private const string _commandNameTera = "/tera";
     private const string _commandNameTs = "/ts";
-    private const string _commandNameTeraSync = "/terasync";
 
     private readonly ApiController _apiController;
     private readonly ICommandManager _commandManager;
@@ -39,21 +37,17 @@ public sealed class CommandManagerService : IDisposable
         _teraSyncConfigService = teraConfigService;
         var commandInfo = new CommandInfo(OnCommand)
         {
-            HelpMessage = "Commands: /tera, /ts, /terasync, /sync"
+            HelpMessage = "Commands: /tera, /ts - Available options: toggle [on|off], gpose, analyze, settings, rescan"
         };
 
-        _commandManager.AddHandler(_commandName, commandInfo);
         _commandManager.AddHandler(_commandNameTera, commandInfo);
         _commandManager.AddHandler(_commandNameTs, commandInfo);
-        _commandManager.AddHandler(_commandNameTeraSync, commandInfo);
     }
 
     public void Dispose()
     {
-        _commandManager.RemoveHandler(_commandName);
         _commandManager.RemoveHandler(_commandNameTera);
         _commandManager.RemoveHandler(_commandNameTs);
-        _commandManager.RemoveHandler(_commandNameTeraSync);
     }
 
     private void OnCommand(string command, string args)

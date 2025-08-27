@@ -486,7 +486,7 @@ public class TopTabMenu
     private void DrawUserConfig(float availableWidth, float spacingX)
     {
         var buttonX = (availableWidth - spacingX) / 2f;
-        if (_uiSharedService.IconTextButton(FontAwesomeIcon.UserCircle, "Edit OpenSynchrons Profile", buttonX))
+        if (_uiSharedService.IconTextButton(FontAwesomeIcon.UserCircle, "Edit Tera Profile", buttonX))
         {
             _teraMediator.Publish(new UiToggleMessage(typeof(EditProfileUi)));
         }

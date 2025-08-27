@@ -169,13 +169,12 @@ public partial class IntroUi : WindowMediatorSubscriberBase
             }
             else
             {
-                UiSharedService.TextWrapped("To avoid downloading files you already have, TeraSync needs to scan your Penumbra mod directory first. " +
-                                     "You'll also need to choose a folder where TeraSync can store downloaded character files from other players. " +
-                                     "Once you've set the storage folder and the scan is complete, you'll automatically move on to the service registration.");
-                UiSharedService.TextWrapped("Note: The initial scan might take a while if you have a lot of mods. Please be patient and let it finish.");
-                UiSharedService.ColorTextWrapped("Warning: After this step, don't delete the FileCache.csv file in your Dalamud Plugin Configurations folder. " +
-                                          "If you do, TeraSync will have to rescan your entire mod collection next time you launch it.", ImGuiColors.DalamudYellow);
-                UiSharedService.ColorTextWrapped("Warning: If the scan seems stuck for a long time, your Penumbra folder might not be configured correctly.", ImGuiColors.DalamudYellow);
+                UiSharedService.TextWrapped("Time to set up file storage! Tera Sync needs to scan your Penumbra mods so it doesn't re-download stuff you already have. " +
+                                     "Pick a folder where Tera Sync can store character files from other players - this is where all the magic happens.");
+                UiSharedService.TextWrapped("Fair warning: if you have a ton of mods, this scan is going to take a hot minute. Grab some coffee and let it do its thing.");
+                UiSharedService.ColorTextWrapped("DO NOT delete the FileCache.csv file after this! It's in your Dalamud Plugin Configurations folder. " +
+                                          "Delete it and Tera Sync will have to scan everything again. You don't want that, trust me.", ImGuiColors.DalamudYellow);
+                UiSharedService.ColorTextWrapped("If the scan gets stuck forever, your Penumbra folder is probably borked. Check your Penumbra settings.", ImGuiColors.DalamudYellow);
                 _uiShared.DrawCacheDirectorySetting();
             }
 
