@@ -170,14 +170,17 @@ public class PopoutProfileUi : WindowMediatorSubscriberBase
             font.Dispose();
 
             var padding = ImGui.GetStyle().WindowPadding.X / 2;
-            bool tallerThanWide = _textureWrap.Height >= _textureWrap.Width;
-            var stretchFactor = tallerThanWide ? 256f * ImGuiHelpers.GlobalScale / _textureWrap.Height : 256f * ImGuiHelpers.GlobalScale / _textureWrap.Width;
-            var newWidth = _textureWrap.Width * stretchFactor;
-            var newHeight = _textureWrap.Height * stretchFactor;
-            var remainingWidth = (256f * ImGuiHelpers.GlobalScale - newWidth) / 2f;
-            var remainingHeight = (256f * ImGuiHelpers.GlobalScale - newHeight) / 2f;
-            drawList.AddImage(_textureWrap.Handle, new Vector2(rectMin.X + padding + remainingWidth, rectMin.Y + spacing.Y + imagePos.Y + remainingHeight),
-                new Vector2(rectMin.X + padding + remainingWidth + newWidth, rectMin.Y + spacing.Y + imagePos.Y + remainingHeight + newHeight));
+            if (_textureWrap != null && _textureWrap.Width > 0 && _textureWrap.Height > 0)
+            {
+                bool tallerThanWide = _textureWrap.Height >= _textureWrap.Width;
+                var stretchFactor = tallerThanWide ? 256f * ImGuiHelpers.GlobalScale / _textureWrap.Height : 256f * ImGuiHelpers.GlobalScale / _textureWrap.Width;
+                var newWidth = _textureWrap.Width * stretchFactor;
+                var newHeight = _textureWrap.Height * stretchFactor;
+                var remainingWidth = (256f * ImGuiHelpers.GlobalScale - newWidth) / 2f;
+                var remainingHeight = (256f * ImGuiHelpers.GlobalScale - newHeight) / 2f;
+                drawList.AddImage(_textureWrap.Handle, new Vector2(rectMin.X + padding + remainingWidth, rectMin.Y + spacing.Y + imagePos.Y + remainingHeight),
+                    new Vector2(rectMin.X + padding + remainingWidth + newWidth, rectMin.Y + spacing.Y + imagePos.Y + remainingHeight + newHeight));
+            }
             if (_supporterTextureWrap != null)
             {
                 const float iconSize = 38;

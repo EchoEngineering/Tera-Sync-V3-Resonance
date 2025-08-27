@@ -1050,9 +1050,20 @@ public partial class UiSharedService : DisposableMediatorSubscriberBase
             width <= 0 ? null : width);
     }
 
-    public IDalamudTextureWrap LoadImage(byte[] imageData)
+    public IDalamudTextureWrap? LoadImage(byte[] imageData)
     {
-        return _textureProvider.CreateFromImageAsync(imageData).Result;
+        try
+        {
+            if (imageData == null || imageData.Length == 0)
+                return null;
+            
+            return _textureProvider.CreateFromImageAsync(imageData).Result;
+        }
+        catch (Exception ex)
+        {
+            Logger.LogWarning(ex, "Failed to load image from byte data");
+            return null;
+        }
     }
 
     public void LoadLocalization(string languageCode)

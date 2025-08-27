@@ -50,8 +50,8 @@ public partial class IntroUi : WindowMediatorSubscriberBase
 
         SizeConstraints = new Window.WindowSizeConstraints()
         {
-            MinimumSize = new Vector2(600, 400),
-            MaximumSize = new Vector2(600, 2000),
+            MinimumSize = new Vector2(700, 400),
+            MaximumSize = new Vector2(700, 2000),
         };
 
         GetToSLocalization();
