@@ -2,7 +2,7 @@
 using TeraSyncV2.API.Data.Enum;
 using TeraSyncV2.API.Data.Extensions;
 using TeraSyncV2Shared.Models;
-using static TeraSyncMainServer.Hubs.TeraHub;
+using static TeraSyncV2Server.Hubs.TeraHub;
 
 namespace TeraSyncV2Server.Utils;
 
