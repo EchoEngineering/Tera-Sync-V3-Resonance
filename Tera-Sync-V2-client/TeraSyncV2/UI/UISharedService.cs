@@ -650,6 +650,7 @@ public partial class UiSharedService : DisposableMediatorSubscriberBase
                     else
                     {
                         ColorTextWrapped("Server is not compatible with Discord OAuth2", ImGuiColors.DalamudRed);
+                        _discordOAuthCheck = null; // Reset state so user can try again
                     }
                 }
             }
