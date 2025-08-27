@@ -1,2 +1,4 @@
 #!/bin/sh
-docker build -t darkarchon/mare-synchronos-server:latest . -f ../Dockerfile-MareSynchronosServer-git --no-cache --pull --force-rm
+cd ../../../
+docker build -t kirin-xiv/terasync-server:latest . -f Docker/build/Dockerfile-TeraSyncV2Server --no-cache --pull --force-rm
+cd Docker/build/linux-git

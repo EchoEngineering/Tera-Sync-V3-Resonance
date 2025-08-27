@@ -1,2 +1,4 @@
 #!/bin/sh
-docker build -t darkarchon/mare-synchronos-authservice:latest . -f ../Dockerfile-MareSynchronosAuthService-git --no-cache --pull --force-rm
+cd ../../../
+docker build -t kirin-xiv/terasync-authservice:latest . -f Docker/build/Dockerfile-TeraSyncV2AuthService --no-cache --pull --force-rm
+cd Docker/build/linux-git
