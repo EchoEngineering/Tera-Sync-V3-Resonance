@@ -109,8 +109,9 @@ public sealed class IpcCallerPenumbra : DisposableMediatorSubscriberBase, IIpcCa
             {
                 penumbraAvailable &= _penumbraEnabled.Invoke();
             }
-            catch
+            catch (Exception ex)
             {
+                Logger.LogWarning(ex, "Penumbra IPC call failed - possible API incompatibility. Penumbra version: {version}", penumbraVersion);
                 penumbraAvailable = false;
             }
             _shownPenumbraUnavailable = _shownPenumbraUnavailable && !penumbraAvailable;
@@ -126,7 +127,7 @@ public sealed class IpcCallerPenumbra : DisposableMediatorSubscriberBase, IIpcCa
             {
                 _shownPenumbraUnavailable = true;
                 _teraMediator.Publish(new NotificationMessage("Penumbra inactive",
-                    "Your Penumbra installation is not active or out of date. Update Penumbra and/or the Enable Mods setting in Penumbra to continue to use Tera Sync V2. If you just updated Penumbra, ignore this message.",
+                    "Your Penumbra installation is not active or has API compatibility issues. This may be due to recent Penumbra updates. Please check that Penumbra is enabled and the 'Enable Mods' setting is active. If you just updated Penumbra, ignore this message.",
                     NotificationType.Error));
             }
         }

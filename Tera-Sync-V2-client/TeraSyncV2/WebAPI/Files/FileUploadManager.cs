@@ -271,7 +271,7 @@ public sealed class FileUploadManager : DisposableMediatorSubscriberBase
         {
             Logger.LogDebug("[{hash}] Compressing", file);
             var data = await _fileDbManager.GetCompressedFileData(file.Hash, uploadToken).ConfigureAwait(false);
-            CurrentUploads.First(e => string.Equals(e.Hash, data.Item1, StringComparison.Ordinal)).Total = data.Item2.Length;
+            CurrentUploads.Single(e => string.Equals(e.Hash, data.Item1, StringComparison.Ordinal)).Total = data.Item2.Length;
             Logger.LogDebug("[{hash}] Starting upload for {filePath}", data.Item1, _fileDbManager.GetFileCacheByHash(data.Item1)!.ResolvedFilepath);
             await uploadTask.ConfigureAwait(false);
             uploadTask = UploadFile(data.Item2, file.Hash, true, uploadToken);
