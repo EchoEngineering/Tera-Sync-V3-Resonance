@@ -5,6 +5,8 @@
 **/build/
 # Exception: Keep Docker build scripts
 !Tera-Sync-V2-server/Docker/build/
+# Exception: Keep TeraAPI Data folder
+!Tera-Sync-V2-server/TeraAPI/Data/
 
 # Docker
 *.tar
