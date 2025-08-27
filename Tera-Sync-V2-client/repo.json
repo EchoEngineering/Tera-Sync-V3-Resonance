@@ -2,7 +2,7 @@
   {
     "Author": "kirin-xiv",
     "Name": "Tera Sync V2",
-    "Description": "Share your appearance, mods, and glamour configurations with friends. Synchronize your Penumbra and Glamourer state seamlessly.",
+    "Description": "Share your appearance, mods, and glamour configurations with friends. Synchronize your Penumbra and Glamourer state seamlessly.\n\nCommands:\n• /tera, /ts, /terasync, or /sync - Opens TeraSyncV2 UI\n• /tera toggle [on/off] - Toggle synchronization\n• /tera gpose - Open character data hub for group posing\n• /tera rescan - Rescan mod cache\n• /tera perf [seconds] - Show performance statistics\n• /tera analyze - Open data analysis UI\n• /tera settings - Open settings window\n\nFeatures:\n• Real-time appearance and mod synchronization\n• Penumbra and Glamourer integration\n• Group pose collaboration tools\n• Performance monitoring\n• Character data analysis",
     "Punchline": "Sync with friends - share your style.",
     "InternalName": "TeraSyncV2",
     "AssemblyVersion": "1.0.0.1",
@@ -19,13 +19,18 @@
       "social"
     ],
     "DalamudApiLevel": 13,
-    "IconUrl": "https://github.com/EchoEngineering/Tera-Sync-V2/raw/main/Tera-Sync-V2-client/TeraSyncV2/images/icon.png?v=1.0.0",
+    "LoadRequiredState": 0,
+    "LoadSync": false,
+    "CanUnloadAsync": true,
+    "LoadPriority": 0,
+    "IconUrl": "https://raw.githubusercontent.com/EchoEngineering/Tera-Sync-V2/main/Tera-Sync-V2-client/TeraSyncV2/images/icon.png",
+    "AcceptsFeedback": true,
     "IsHide": "False",
     "IsTestingExclusive": "False",
     "LastUpdated": 1748329600,
     "DownloadCount": 0,
-    "DownloadLinkInstall": "https://github.com/EchoEngineering/Tera-Sync-V2/releases/download/v1.0.0.1/TeraSyncV2.zip",
-    "DownloadLinkTesting": "https://github.com/EchoEngineering/Tera-Sync-V2/releases/download/v1.0.0.1/TeraSyncV2.zip",
-    "DownloadLinkUpdate": "https://github.com/EchoEngineering/Tera-Sync-V2/releases/download/v1.0.0.1/TeraSyncV2.zip"
+    "DownloadLinkInstall": "https://raw.githubusercontent.com/EchoEngineering/Tera-Sync-V2/main/Tera-Sync-V2-client/latest.zip",
+    "DownloadLinkTesting": "https://raw.githubusercontent.com/EchoEngineering/Tera-Sync-V2/main/Tera-Sync-V2-client/latest.zip",
+    "DownloadLinkUpdate": "https://raw.githubusercontent.com/EchoEngineering/Tera-Sync-V2/main/Tera-Sync-V2-client/latest.zip"
   }
 ]
