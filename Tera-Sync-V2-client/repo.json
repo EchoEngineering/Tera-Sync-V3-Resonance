@@ -1,0 +1,31 @@
+[
+  {
+    "Author": "kirin-xiv",
+    "Name": "Tera Sync V2",
+    "Description": "Share your appearance, mods, and glamour configurations with friends. Synchronize your Penumbra and Glamourer state seamlessly.",
+    "Punchline": "Sync with friends - share your style.",
+    "InternalName": "TeraSyncV2",
+    "AssemblyVersion": "1.0.0.0",
+    "RepoUrl": "https://github.com/EchoEngineering/Tera-Sync-V2",
+    "ApplicableVersion": "any",
+    "Tags": [
+      "customization",
+      "penumbra",
+      "glamourer",
+      "synchronization",
+      "appearance",
+      "mods",
+      "sharing",
+      "social"
+    ],
+    "DalamudApiLevel": 13,
+    "IconUrl": "https://github.com/EchoEngineering/Tera-Sync-V2/raw/main/Tera-Sync-V2-client/TeraSyncV2/images/icon.png",
+    "IsHide": "False",
+    "IsTestingExclusive": "False",
+    "LastUpdated": 1748329600,
+    "DownloadCount": 0,
+    "DownloadLinkInstall": "https://github.com/EchoEngineering/Tera-Sync-V2/releases/download/v1.0.0.0/TeraSyncV2.zip",
+    "DownloadLinkTesting": "https://github.com/EchoEngineering/Tera-Sync-V2/releases/download/v1.0.0.0/TeraSyncV2.zip",
+    "DownloadLinkUpdate": "https://github.com/EchoEngineering/Tera-Sync-V2/releases/download/v1.0.0.0/TeraSyncV2.zip"
+  }
+]
