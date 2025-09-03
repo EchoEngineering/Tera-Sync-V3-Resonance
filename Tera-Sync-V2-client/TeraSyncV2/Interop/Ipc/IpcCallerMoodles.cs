@@ -27,9 +27,9 @@ public sealed class IpcCallerMoodles : IIpcCaller
 
         _moodlesApiVersion = pi.GetIpcSubscriber<int>("Moodles.Version");
         _moodlesOnChange = pi.GetIpcSubscriber<IPlayerCharacter, object>("Moodles.StatusManagerModified");
-        _moodlesGetStatus = pi.GetIpcSubscriber<nint, string>("Moodles.GetStatusManagerByPtr");
-        _moodlesSetStatus = pi.GetIpcSubscriber<nint, string, object>("Moodles.SetStatusManagerByPtr");
-        _moodlesRevertStatus = pi.GetIpcSubscriber<nint, object>("Moodles.ClearStatusManagerByPtr");
+        _moodlesGetStatus = pi.GetIpcSubscriber<nint, string>("Moodles.GetStatusManagerByPtrV2");
+        _moodlesSetStatus = pi.GetIpcSubscriber<nint, string, object>("Moodles.SetStatusManagerByPtrV2");
+        _moodlesRevertStatus = pi.GetIpcSubscriber<nint, object>("Moodles.ClearStatusManagerByPtrV2");
 
         _moodlesOnChange.Subscribe(OnMoodlesChange);
 
@@ -47,7 +47,7 @@ public sealed class IpcCallerMoodles : IIpcCaller
     {
         try
         {
-            APIAvailable = _moodlesApiVersion.InvokeFunc() == 1;
+            APIAvailable = _moodlesApiVersion.InvokeFunc() == 3;
         }
         catch
         {
@@ -78,14 +78,22 @@ public sealed class IpcCallerMoodles : IIpcCaller
 
     public async Task SetStatusAsync(nint pointer, string status)
     {
-        if (!APIAvailable) return;
+        if (!APIAvailable) 
+        {
+            _logger.LogDebug("Moodles API not available, cannot set status for pointer {pointer}", pointer);
+            return;
+        }
         try
         {
+            _logger.LogDebug("Setting Moodles status for pointer {pointer}: Length={length}, Data={data}", 
+                pointer, status?.Length ?? 0, 
+                string.IsNullOrEmpty(status) ? "EMPTY" : status.Substring(0, Math.Min(50, status.Length)) + "...");
             await _dalamudUtil.RunOnFrameworkThread(() => _moodlesSetStatus.InvokeAction(pointer, status)).ConfigureAwait(false);
+            _logger.LogDebug("Successfully set Moodles status for pointer {pointer}", pointer);
         }
         catch (Exception e)
         {
-            _logger.LogWarning(e, "Could not Set Moodles Status");
+            _logger.LogWarning(e, "Could not Set Moodles Status for pointer {pointer}", pointer);
         }
     }
 

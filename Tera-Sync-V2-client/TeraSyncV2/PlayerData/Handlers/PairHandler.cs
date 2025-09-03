@@ -346,6 +346,9 @@ public sealed class PairHandler : DisposableMediatorSubscriberBase
                         break;
 
                     case PlayerChanges.Moodles:
+                        Logger.LogDebug("[{applicationId}] Applying Moodles for {alias}: Data length={length}, Data={data}", 
+                            applicationId, Pair.UserData.AliasOrUID, charaData.MoodlesData?.Length ?? 0, 
+                            string.IsNullOrEmpty(charaData.MoodlesData) ? "EMPTY" : charaData.MoodlesData.Substring(0, Math.Min(50, charaData.MoodlesData.Length)) + "...");
                         await _ipcManager.Moodles.SetStatusAsync(handler.Address, charaData.MoodlesData).ConfigureAwait(false);
                         break;
 
