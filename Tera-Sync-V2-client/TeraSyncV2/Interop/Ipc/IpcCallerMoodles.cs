@@ -32,12 +32,16 @@ public sealed class IpcCallerMoodles : IIpcCaller
         _moodlesRevertStatus = pi.GetIpcSubscriber<nint, object>("Moodles.ClearStatusManagerByPtrV2");
 
         _moodlesOnChange.Subscribe(OnMoodlesChange);
+        _logger.LogDebug("TeraSync subscribed to Moodles.StatusManagerModified IPC event");
 
         CheckAPI();
+        _logger.LogDebug("Moodles API initialized. Available: {available}", APIAvailable);
     }
 
     private void OnMoodlesChange(IPlayerCharacter character)
     {
+        _logger.LogDebug("TeraSync received Moodles change for character: {name} at address {address}", 
+            character.Name.TextValue, character.Address);
         _teraMediator.Publish(new MoodlesMessage(character.Address));
     }
 
