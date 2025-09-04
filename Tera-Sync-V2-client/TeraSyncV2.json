@@ -1,0 +1,25 @@
+{
+  "Author": "kirin-xiv",
+  "Name": "Tera Sync V2",
+  "InternalName": "TeraSyncV2",
+  "AssemblyVersion": "1.0.2.3",
+  "Description": "Share your appearance, mods, and glamour configurations with friends. Synchronize your Penumbra and Glamourer state seamlessly.",
+  "ApplicableVersion": "any",
+  "Tags": [
+    "customization",
+    "penumbra",
+    "glamourer",
+    "synchronization",
+    "appearance",
+    "mods",
+    "sharing",
+    "social"
+  ],
+  "DalamudApiLevel": 13,
+  "LoadRequiredState": 0,
+  "LoadSync": false,
+  "CanUnloadAsync": false,
+  "LoadPriority": 0,
+  "Punchline": "Sync with friends - share your style.",
+  "AcceptsFeedback": true
+}
