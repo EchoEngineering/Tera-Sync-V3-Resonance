@@ -244,6 +244,17 @@ public sealed class Plugin : IDalamudPlugin
         .Build();
 
         _ = _host.StartAsync();
+        
+        // Register with Resonance for cross-client sync discovery
+        try
+        {
+            var resonanceRegister = pluginInterface.GetIpcSubscriber<string, string, bool>("Resonance.RegisterClient");
+            resonanceRegister?.InvokeFunc("TeraSync", Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "2.0.0");
+        }
+        catch
+        {
+            // Resonance not installed, ignore
+        }
     }
 
     public void Dispose()
