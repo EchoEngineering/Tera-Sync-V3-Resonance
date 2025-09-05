@@ -678,6 +678,24 @@ public sealed partial class CharaDataManager : DisposableMediatorSubscriberBase
             };
             var res = await _apiController.CharaDataUpdate(updateDto).ConfigureAwait(false);
             await AddOrUpdateDto(res).ConfigureAwait(false);
+            
+            // Publish to Resonance for cross-fork sync
+            try
+            {
+                var resonancePublish = _dalamudUtilService.PluginInterface.GetIpcSubscriber<Dictionary<string, object>, bool>("Resonance.PublishData");
+                var characterData = new Dictionary<string, object>
+                {
+                    ["Id"] = res?.Id ?? updateDto.Id,
+                    ["FileGamePaths"] = updateDto.FileGamePaths,
+                    ["Source"] = "TeraSync",
+                    ["Timestamp"] = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+                };
+                resonancePublish?.InvokeFunc(characterData);
+            }
+            catch
+            {
+                // Resonance not available, ignore
+            }
         }).ConfigureAwait(false);
 
         UiBlockingComputation = null;
@@ -924,6 +942,24 @@ public sealed partial class CharaDataManager : DisposableMediatorSubscriberBase
 
         var res = await _apiController.CharaDataUpdate(baseUpdateDto).ConfigureAwait(false);
         await AddOrUpdateDto(res).ConfigureAwait(false);
+        
+        // Publish to Resonance for cross-fork sync
+        try
+        {
+            var resonancePublish = _dalamudUtilService.PluginInterface.GetIpcSubscriber<Dictionary<string, object>, bool>("Resonance.PublishData");
+            var characterData = new Dictionary<string, object>
+            {
+                ["Id"] = res?.Id ?? baseUpdateDto.Id,
+                ["FileGamePaths"] = baseUpdateDto.FileGamePaths,
+                ["Source"] = "TeraSync",
+                ["Timestamp"] = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+            };
+            resonancePublish?.InvokeFunc(characterData);
+        }
+        catch
+        {
+            // Resonance not available, ignore
+        }
     }
 
     private async Task DownloadAndAplyDataAsync(string charaName, CharaDataDownloadDto charaDataDownloadDto, CharaDataMetaInfoDto metaInfo, bool autoRevert = true)

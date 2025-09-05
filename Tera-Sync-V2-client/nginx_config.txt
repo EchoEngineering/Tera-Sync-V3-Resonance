@@ -1,0 +1,106 @@
+server {
+    server_name tera.terasync.app;
+    client_max_body_size 100M;
+    
+    # Allow Let's Encrypt verification
+    location /.well-known/acme-challenge/ {
+        root /var/www/html;
+    }
+    
+    # Auth Service (OAuth endpoints)
+    location /oauth/ {
+        proxy_pass http://127.0.0.1:8080/oauth/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    
+    # Legacy Auth Service endpoints (secret key auth)
+    location /auth/ {
+        proxy_pass http://127.0.0.1:8080/auth/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    
+    # Discord OAuth call endpoint
+    location /discordCall {
+        proxy_pass http://127.0.0.1:8080/oauth/discordCall;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    
+    # Discord OAuth callback
+    location /discordCallback {
+        proxy_pass http://127.0.0.1:8080/oauth/discordCallback;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    
+    # Request endpoint for file queue
+    location /request/ {
+        proxy_pass http://127.0.0.1:6200/request/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        client_max_body_size 100M;
+    }
+    
+    # Files endpoint for upload/API
+    location /files/ {
+        proxy_pass http://127.0.0.1:6200/files/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        client_max_body_size 100M;
+    }
+    
+    # Static Files Server (CDN)
+    location /cache/ {
+        proxy_pass http://127.0.0.1:6200;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+    
+    # Main server (everything else)
+    location / {
+        proxy_pass http://127.0.0.1:6000;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        
+        # WebSocket support for SignalR
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_cache_bypass $http_upgrade;
+    }
+
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/tera.terasync.app/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/tera.terasync.app/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+}
+
+server {
+    if ($host = tera.terasync.app) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+    listen 80;
+    server_name tera.terasync.app;
+    client_max_body_size 100M;
+    return 404; # managed by Certbot
+}

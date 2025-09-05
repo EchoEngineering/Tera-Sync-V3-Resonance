@@ -1,9 +1,9 @@
 {
   "Author": "kirin-xiv",
-  "Name": "Tera Sync V2",
-  "Punchline": "Sync with friends - share your style.",
-  "Description": "Share your appearance, mods, and glamour configurations with friends. Synchronize your Penumbra and Glamourer state seamlessly.",
-  "InternalName": "TeraSyncV2",
+  "Name": "TeraSync V3 (Experimental)",
+  "Punchline": "EXPERIMENTAL: Cross-fork sync with Resonance",
+  "Description": "EXPERIMENTAL: Cross-fork synchronization using Resonance. Sync with users on different Mare clients (TeraSync, Neko Net, etc.)",
+  "InternalName": "TeraSyncV3",
   "ApplicableVersion": "any",
   "Tags": [
     "customization",
@@ -13,6 +13,9 @@
     "appearance",
     "mods",
     "sharing",
-    "social"
+    "social",
+    "experimental",
+    "resonance",
+    "cross-fork"
   ]
 }
