@@ -116,7 +116,19 @@ public sealed class Plugin : IDalamudPlugin
             collection.AddSingleton<PlayerPerformanceService>();
             collection.AddSingleton<TransientResourceManager>();
 
-            collection.AddSingleton<CharaDataManager>();
+            collection.AddSingleton((s) => new CharaDataManager(
+                s.GetRequiredService<ILogger<CharaDataManager>>(),
+                s.GetRequiredService<ApiController>(),
+                s.GetRequiredService<CharaDataFileHandler>(),
+                s.GetRequiredService<TeraMediator>(),
+                s.GetRequiredService<IpcManager>(),
+                s.GetRequiredService<DalamudUtilService>(),
+                s.GetRequiredService<FileDownloadManagerFactory>(),
+                s.GetRequiredService<CharaDataConfigService>(),
+                s.GetRequiredService<CharaDataNearbyManager>(),
+                s.GetRequiredService<CharaDataCharacterHandler>(),
+                s.GetRequiredService<PairManager>(),
+                pluginInterface));
             collection.AddSingleton<CharaDataFileHandler>();
             collection.AddSingleton<CharaDataCharacterHandler>();
             collection.AddSingleton<CharaDataNearbyManager>();

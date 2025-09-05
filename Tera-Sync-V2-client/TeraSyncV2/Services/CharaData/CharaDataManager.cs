@@ -1,4 +1,5 @@
 ﻿using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Plugin;
 using K4os.Compression.LZ4.Legacy;
 using Microsoft.Extensions.Logging;
 using TeraSyncV2.API.Data;
@@ -29,6 +30,7 @@ public sealed partial class CharaDataManager : DisposableMediatorSubscriberBase
     private readonly CharaDataNearbyManager _nearbyManager;
     private readonly CharaDataCharacterHandler _characterHandler;
     private readonly PairManager _pairManager;
+    private readonly IDalamudPluginInterface _pluginInterface;
     private readonly Dictionary<string, CharaDataFullExtendedDto> _ownCharaData = [];
     private readonly Dictionary<string, Task> _sharedMetaInfoTimeoutTasks = [];
     private readonly Dictionary<UserData, List<CharaDataMetaInfoExtendedDto>> _sharedWithYouData = [];
@@ -45,7 +47,7 @@ public sealed partial class CharaDataManager : DisposableMediatorSubscriberBase
         TeraMediator teraMediator, IpcManager ipcManager, DalamudUtilService dalamudUtilService,
         FileDownloadManagerFactory fileDownloadManagerFactory,
         CharaDataConfigService charaDataConfigService, CharaDataNearbyManager charaDataNearbyManager,
-        CharaDataCharacterHandler charaDataCharacterHandler, PairManager pairManager) : base(logger, teraMediator)
+        CharaDataCharacterHandler charaDataCharacterHandler, PairManager pairManager, IDalamudPluginInterface pluginInterface) : base(logger, teraMediator)
     {
         _apiController = apiController;
         _fileHandler = charaDataFileHandler;
@@ -55,6 +57,7 @@ public sealed partial class CharaDataManager : DisposableMediatorSubscriberBase
         _nearbyManager = charaDataNearbyManager;
         _characterHandler = charaDataCharacterHandler;
         _pairManager = pairManager;
+        _pluginInterface = pluginInterface;
         teraMediator.Subscribe<ConnectedMessage>(this, (msg) =>
         {
             _connectCts?.Cancel();
@@ -682,7 +685,7 @@ public sealed partial class CharaDataManager : DisposableMediatorSubscriberBase
             // Publish to Resonance for cross-fork sync
             try
             {
-                var resonancePublish = _dalamudUtilService.PluginInterface.GetIpcSubscriber<Dictionary<string, object>, bool>("Resonance.PublishData");
+                var resonancePublish = _pluginInterface.GetIpcSubscriber<Dictionary<string, object>, bool>("Resonance.PublishData");
                 var characterData = new Dictionary<string, object>
                 {
                     ["Id"] = res?.Id ?? updateDto.Id,
@@ -946,7 +949,7 @@ public sealed partial class CharaDataManager : DisposableMediatorSubscriberBase
         // Publish to Resonance for cross-fork sync
         try
         {
-            var resonancePublish = _dalamudUtilService.PluginInterface.GetIpcSubscriber<Dictionary<string, object>, bool>("Resonance.PublishData");
+            var resonancePublish = _pluginInterface.GetIpcSubscriber<Dictionary<string, object>, bool>("Resonance.PublishData");
             var characterData = new Dictionary<string, object>
             {
                 ["Id"] = res?.Id ?? baseUpdateDto.Id,
