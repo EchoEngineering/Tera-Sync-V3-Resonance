@@ -8,6 +8,7 @@
     <Copyright>Copyright © kirin-xiv 2024</Copyright>
     <PackageProjectUrl>https://github.com/EchoEngineering/TeraSyncV3-Resonance</PackageProjectUrl>
     <AssemblyVersion>3.0.0.1</AssemblyVersion>
+    <AssemblyName>TeraSyncV3</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup>
