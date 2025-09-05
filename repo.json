@@ -1,0 +1,38 @@
+[
+  {
+    "Author": "kirin-xiv",
+    "Name": "TeraSync V3 (Experimental)",
+    "Punchline": "EXPERIMENTAL: Cross-fork sync with Resonance",
+    "Description": "EXPERIMENTAL: Cross-fork synchronization using Resonance. Sync with users on different Mare clients (TeraSync, Neko Net, etc.)",
+    "InternalName": "TeraSyncV3",
+    "AssemblyVersion": "3.0.0.1",
+    "RepoUrl": "https://github.com/EchoEngineering/Tera-Sync-V3-Resonance",
+    "ApplicableVersion": "any",
+    "Tags": [
+      "customization",
+      "penumbra",
+      "glamourer",
+      "synchronization",
+      "appearance",
+      "mods",
+      "sharing",
+      "social",
+      "experimental",
+      "resonance",
+      "cross-fork"
+    ],
+    "DalamudApiLevel": 13,
+    "LoadRequiredState": 0,
+    "LoadSync": false,
+    "CanUnloadAsync": false,
+    "LoadPriority": 0,
+    "ImageUrls": [],
+    "DownloadLinkInstall": "https://github.com/EchoEngineering/Tera-Sync-V3-Resonance/releases/latest/download/TeraSyncV3-latest.zip",
+    "IsHide": false,
+    "IsTestingExclusive": false,
+    "DownloadLinkTesting": "https://github.com/EchoEngineering/Tera-Sync-V3-Resonance/releases/latest/download/TeraSyncV3-latest.zip",
+    "DownloadLinkUpdate": "https://github.com/EchoEngineering/Tera-Sync-V3-Resonance/releases/latest/download/TeraSyncV3-latest.zip",
+    "DownloadCount": 0,
+    "LastUpdated": "2024-09-05T01:19:00.000Z"
+  }
+]
