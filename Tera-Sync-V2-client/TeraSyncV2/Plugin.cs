@@ -264,6 +264,7 @@ public sealed class Plugin : IDalamudPlugin
         // Initialize Resonance SDK for cross-fork federation
         try
         {
+            pluginLog.Information("Starting Resonance SDK setup...");
             // Create Resonance client with embedded PDS
             var resonanceConfig = new ResonanceConfig
             {
@@ -271,9 +272,12 @@ public sealed class Plugin : IDalamudPlugin
                 EnableDebugLogging = false
             };
             
+            pluginLog.Information("Creating ResonanceClient...");
             _resonanceClient = new ResonanceClient(resonanceConfig);
+            pluginLog.Information("ResonanceClient created successfully");
             
             // Initialize federation for TeraSync
+            pluginLog.Information("Starting background federation initialization...");
             Task.Run(async () =>
             {
                 try
@@ -286,6 +290,7 @@ public sealed class Plugin : IDalamudPlugin
                     pluginLog.Error(ex, "Failed to initialize Resonance federation");
                 }
             });
+            pluginLog.Information("Background federation task started");
             
             // Register the UI - adds /resonance and /res commands  
             try
