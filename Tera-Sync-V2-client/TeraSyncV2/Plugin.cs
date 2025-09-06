@@ -288,17 +288,35 @@ public sealed class Plugin : IDalamudPlugin
             });
             
             // Register the UI - adds /resonance and /res commands  
-            _resonanceUi = _resonanceClient.CreateUIIntegration("TeraSync", 
-                (command, action) =>
-                {
-                    var commandInfo = new CommandInfo((cmd, args) => action())
+            try
+            {
+                pluginLog.Information("Creating Resonance UI integration...");
+                _resonanceUi = _resonanceClient.CreateUIIntegration("TeraSync", 
+                    (command, action) =>
                     {
-                        HelpMessage = $"Open Resonance Federation UI"
-                    };
-                    commandManager.AddHandler($"/{command}", commandInfo);
-                },
-                pluginInterface.UiBuilder // Pass UiBuilder for automatic drawing registration
-            );
+                        pluginLog.Information($"Registering command: /{command}");
+                        try
+                        {
+                            var commandInfo = new CommandInfo((cmd, args) => action())
+                            {
+                                HelpMessage = $"Open Resonance Federation UI"
+                            };
+                            commandManager.AddHandler($"/{command}", commandInfo);
+                            pluginLog.Information($"Successfully registered command: /{command}");
+                        }
+                        catch (Exception cmdEx)
+                        {
+                            pluginLog.Error(cmdEx, $"Failed to register command /{command}");
+                        }
+                    },
+                    pluginInterface.UiBuilder // Pass UiBuilder for automatic drawing registration
+                );
+                pluginLog.Information("Resonance UI integration created successfully");
+            }
+            catch (Exception uiEx)
+            {
+                pluginLog.Error(uiEx, "Failed to create Resonance UI integration");
+            }
             
             pluginLog.Information("Resonance SDK initialized - federation ready with /resonance and /res commands");
         }
