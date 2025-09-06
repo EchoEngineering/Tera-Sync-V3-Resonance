@@ -27,11 +27,11 @@
     "CanUnloadAsync": false,
     "LoadPriority": 0,
     "ImageUrls": [],
-    "DownloadLinkInstall": "https://raw.githubusercontent.com/EchoEngineering/Tera-Sync-V3-Resonance/main/Tera-Sync-V2-client/TeraSyncV2/bin/Release/TeraSyncV3-latest.zip",
+    "DownloadLinkInstall": "https://raw.githubusercontent.com/EchoEngineering/Tera-Sync-V3-Resonance/main/Tera-Sync-V2-client/latest.zip",
     "IsHide": false,
     "IsTestingExclusive": false,
-    "DownloadLinkTesting": "https://raw.githubusercontent.com/EchoEngineering/Tera-Sync-V3-Resonance/main/Tera-Sync-V2-client/TeraSyncV2/bin/Release/TeraSyncV3-latest.zip",
-    "DownloadLinkUpdate": "https://raw.githubusercontent.com/EchoEngineering/Tera-Sync-V3-Resonance/main/Tera-Sync-V2-client/TeraSyncV2/bin/Release/TeraSyncV3-latest.zip",
+    "DownloadLinkTesting": "https://raw.githubusercontent.com/EchoEngineering/Tera-Sync-V3-Resonance/main/Tera-Sync-V2-client/latest.zip",
+    "DownloadLinkUpdate": "https://raw.githubusercontent.com/EchoEngineering/Tera-Sync-V3-Resonance/main/Tera-Sync-V2-client/latest.zip",
     "DownloadCount": 0,
     "LastUpdated": "2025-09-06T23:11:00.000Z"
   }
