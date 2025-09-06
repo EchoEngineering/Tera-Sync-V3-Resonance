@@ -1,0 +1,31 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 as BUILD
+
+COPY TeraAPI /server/TeraAPI
+COPY TeraSyncServer/TeraSyncShared /server/TeraSyncServer/TeraSyncShared
+COPY TeraSyncServer/TeraSyncStaticFilesServer /server/TeraSyncServer/TeraSyncStaticFilesServer
+
+WORKDIR /server/TeraSyncServer/TeraSyncStaticFilesServer/
+
+RUN dotnet publish \
+        --configuration=Release \
+        --os=linux \
+        --output=/build \
+        TeraSyncStaticFilesServer.csproj
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+
+RUN adduser \
+        --disabled-password \
+        --group \
+        --no-create-home \
+        --quiet \
+        --system \
+        terasync
+
+COPY --from=BUILD /build /opt/TeraSyncV2StaticFilesServer
+RUN chown -R terasync:terasync /opt/TeraSyncV2StaticFilesServer
+
+USER terasync:terasync
+WORKDIR /opt/TeraSyncV2StaticFilesServer
+
+CMD ["./TeraSyncStaticFilesServer"]

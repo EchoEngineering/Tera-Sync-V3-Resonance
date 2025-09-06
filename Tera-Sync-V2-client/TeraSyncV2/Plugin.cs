@@ -1,4 +1,5 @@
 ﻿using Dalamud.Game.ClientState.Objects;
+using Dalamud.Game.Command;
 using Dalamud.Interface.ImGuiFileDialog;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
@@ -30,12 +31,15 @@ using TeraSyncV2.UI.Handlers;
 using TeraSyncV2.WebAPI;
 using TeraSyncV2.WebAPI.Files;
 using TeraSyncV2.WebAPI.SignalR;
+using Resonance.SDK;
 
 namespace TeraSyncV2;
 
 public sealed class Plugin : IDalamudPlugin
 {
     private readonly IHost _host;
+    private readonly IResonanceClient _resonanceClient;
+    private readonly IDisposable? _resonanceUi;
 
     public Plugin(IDalamudPluginInterface pluginInterface, ICommandManager commandManager, IDataManager gameData,
         IFramework framework, IObjectTable objectTable, IClientState clientState, ICondition condition, IChatGui chatGui,
@@ -257,20 +261,54 @@ public sealed class Plugin : IDalamudPlugin
 
         _ = _host.StartAsync();
         
-        // Register with Resonance for cross-client sync discovery
+        // Initialize Resonance SDK for cross-fork federation
         try
         {
-            var resonanceRegister = pluginInterface.GetIpcSubscriber<string, string, bool>("Resonance.RegisterClient");
-            resonanceRegister?.InvokeFunc("TeraSync", Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "2.0.0");
+            // Create Resonance client with embedded PDS
+            var resonanceConfig = new ResonanceConfig
+            {
+                DatabasePath = Path.Combine(pluginInterface.ConfigDirectory.FullName, "resonance.db"),
+                EnableDebugLogging = false
+            };
+            
+            _resonanceClient = new ResonanceClient(resonanceConfig);
+            
+            // Initialize federation for TeraSync
+            Task.Run(async () =>
+            {
+                try
+                {
+                    await _resonanceClient.InitializeAsync("TeraSync");
+                    pluginLog.Information("Resonance federation initialized for TeraSync");
+                }
+                catch (Exception ex)
+                {
+                    pluginLog.Error(ex, "Failed to initialize Resonance federation");
+                }
+            });
+            
+            // Register the UI - adds /resonance and /res commands  
+            _resonanceUi = _resonanceClient.CreateUIIntegration("TeraSync", (command, action) =>
+            {
+                var commandInfo = new CommandInfo((cmd, args) => action())
+                {
+                    HelpMessage = $"Open Resonance Federation UI"
+                };
+                commandManager.AddHandler($"/{command}", commandInfo);
+            });
+            
+            pluginLog.Information("Resonance SDK initialized - federation ready with /resonance and /res commands");
         }
-        catch
+        catch (Exception ex)
         {
-            // Resonance not installed, ignore
+            pluginLog.Error(ex, "Failed to set up Resonance SDK");
         }
     }
 
     public void Dispose()
     {
+        _resonanceUi?.Dispose();
+        (_resonanceClient as IDisposable)?.Dispose();
         _host.StopAsync().GetAwaiter().GetResult();
         _host.Dispose();
     }

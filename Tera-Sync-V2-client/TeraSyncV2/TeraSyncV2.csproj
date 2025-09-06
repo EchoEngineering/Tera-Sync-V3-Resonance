@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Authors>kirin-xiv</Authors>
     <Company>kirin-xiv</Company>
-    <Version>3.0.0.1</Version>
-    <Description>EXPERIMENTAL: Cross-fork sync using Resonance. Share appearance/mods with users on different Mare clients (TeraSync, Neko Net, etc.)</Description>
+    <Version>3.0.0.2</Version>
+    <Description>Cross-fork sync using Resonance federation. Share appearance/mods with users on different Mare clients (TeraSync, Neko Net, etc.). Use /resonance or /res to access federation UI.</Description>
     <Copyright>Copyright © kirin-xiv 2024</Copyright>
     <PackageProjectUrl>https://github.com/EchoEngineering/TeraSyncV3-Resonance</PackageProjectUrl>
-    <AssemblyVersion>3.0.0.1</AssemblyVersion>
+    <AssemblyVersion>3.0.0.2</AssemblyVersion>
     <AssemblyName>TeraSyncV3</AssemblyName>
   </PropertyGroup>
 
@@ -57,6 +57,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TeraSyncV2.API\TeraSyncV2.API.csproj" />
+    <ProjectReference Include="..\..\..\Resonance.SDK\src\Resonance.SDK.csproj" />
   </ItemGroup>
 
   <ItemGroup>

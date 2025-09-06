@@ -1,0 +1,106 @@
+services:
+  postgres:
+    image: postgres:latest
+    command: ["postgres", "-c", "log_statement=all"]
+    restart: always
+    ports:
+      - 5432:5432/tcp
+    environment:
+      POSTGRES_DB: terasync
+      POSTGRES_USER: terasync
+      POSTGRES_PASSWORD: secretdevpassword
+    volumes:
+      - ../data/postgresql/:/var/lib/postgresql/data
+      - postgres_socket:/var/run/postgresql:rw
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U terasync"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:latest
+    command: [sh, -c, "rm -f /data/dump.rdb && redis-server --save \"\" --appendonly no --requirepass secretredispassword"]
+    volumes:
+      - cache:/data
+
+  tera-server:
+    image: kirin-xiv/tera-synchronos-server:latest
+    restart: on-failure
+    ports:
+      - 6000:6000/tcp
+      - 6050:6050/tcp
+    environment:
+      TeraSyncV2__CdnFullUrl: "${DEV_TERA_CDNURL}"
+      TeraSyncV2__XIVAPIKey: "${DEV_TERA_XIVAPIKEY}"
+      DOTNET_USE_POLLING_FILE_WATCHER: 1
+    volumes:
+      - ../config/standalone/server-standalone.json:/opt/TeraSyncV2Server/appsettings.json
+      - ../log/server-standalone/:/opt/TeraSyncV2Server/logs/:rw
+      - postgres_socket:/var/run/postgresql/:rw
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail http://localhost:6000/health || exit 1"]
+      retries: 60
+      start_period: 10s
+      timeout: 1s
+
+  tera-auth:
+    image: kirin-xiv/tera-synchronos-authservice:latest
+    restart: on-failure
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: 1
+    volumes:
+      - ../config/standalone/authservice-standalone.json:/opt/TeraSyncV2AuthService/appsettings.json
+      - ../log/authservice-standalone/:/opt/TeraSyncV2AuthService/logs/:rw
+      - postgres_socket:/var/run/postgresql/:rw
+    depends_on:
+      tera-server:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+
+  tera-services:
+    image: kirin-xiv/tera-synchronos-services:latest
+    restart: on-failure
+    environment:
+      TeraSyncV2__DiscordBotToken: "${DEV_TERA_DISCORDTOKEN}"
+      TeraSyncV2__DiscordChannelForMessages: "${DEV_TERA_DISCORDCHANNEL}"
+      TeraSyncV2__DiscordChannelForReports: "${DEV_TERA_DISCORDCHANNEL}"
+      TeraSyncV2__DiscordChannelForCommands: "${DEV_TERA_DISCORDCHANNEL}"
+      DOTNET_USE_POLLING_FILE_WATCHER: 1
+    volumes:
+      - ../config/standalone/services-standalone.json:/opt/TeraSyncV2Services/appsettings.json
+      - ../log/services-standalone/:/opt/TeraSyncV2Services/logs/:rw
+      - postgres_socket:/var/run/postgresql/:rw
+    depends_on:
+      tera-server:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+
+  tera-files:
+    image: kirin-xiv/tera-synchronos-staticfilesserver:latest
+    ports:
+      - 6200:6200/tcp
+    restart: on-failure
+    environment:
+      TeraSyncV2__CdnFullUrl: "${DEV_TERA_CDNURL}"
+      DOTNET_USE_POLLING_FILE_WATCHER: 1
+    volumes:
+      - ../config/standalone/files-standalone.json:/opt/TeraSyncV2StaticFilesServer/appsettings.json
+      - ../log/files-standalone/:/opt/TeraSyncV2StaticFilesServer/logs/:rw
+      - postgres_socket:/var/run/postgresql/:rw
+      - ../data/files-standalone/:/teracache/:rw
+    depends_on:
+      postgres:
+        condition: service_healthy
+      tera-server:
+        condition: service_healthy
+
+volumes:
+  postgres_socket:
+  cache:
+    driver: local
