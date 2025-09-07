@@ -1,8 +1,8 @@
 {
-  "Author": "kirin-xiv",
-  "Name": "TeraSync V3 (Experimental)",
-  "Punchline": "EXPERIMENTAL: Cross-fork sync with Resonance",
-  "Description": "EXPERIMENTAL: Cross-fork synchronization using Resonance. Sync with users on different Mare clients (TeraSync, Neko Net, etc.)",
+  "Author": "Echo Engineering",
+  "Name": "TeraSync V3 (Resonance)",
+  "Punchline": "Cross-fork sync with Resonance federation",
+  "Description": "Cross-fork synchronization using Resonance federation. Share appearance/mods with users on different Mare clients (TeraSync, Neko Net, etc.). Use /resonance or /res commands to access federation UI.",
   "InternalName": "TeraSyncV3",
   "ApplicableVersion": "any",
   "Tags": [

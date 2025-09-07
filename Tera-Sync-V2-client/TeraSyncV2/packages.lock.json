@@ -663,6 +663,7 @@
       "resonance.sdk": {
         "type": "Project",
         "dependencies": {
+          "DalamudPackager": "[13.0.0, )",
           "Dapper": "[2.1.35, )",
           "FishyFlip": "[3.1.2, )",
           "MessagePack": "[2.5.187, )",
