@@ -47,6 +47,8 @@ public sealed class Plugin : IDalamudPlugin
         ITextureProvider textureProvider, IContextMenu contextMenu, IGameInteropProvider gameInteropProvider, IGameConfig gameConfig,
         ISigScanner sigScanner)
     {
+        pluginLog.Information("[TeraSync] Plugin constructor started!");
+        
         if (!Directory.Exists(pluginInterface.ConfigDirectory.FullName))
             Directory.CreateDirectory(pluginInterface.ConfigDirectory.FullName);
         var traceDir = Path.Join(pluginInterface.ConfigDirectory.FullName, "tracelog");
@@ -271,7 +273,9 @@ public sealed class Plugin : IDalamudPlugin
                 EnableDebugLogging = false
             };
             
+            pluginLog.Information($"[TeraSync] Creating ResonanceClient with DB path: {resonanceConfig.DatabasePath}");
             _resonanceClient = new ResonanceClient(resonanceConfig);
+            pluginLog.Information("[TeraSync] ResonanceClient created successfully!");
             
             // Initialize federation for TeraSync in background
             Task.Run(async () =>
@@ -294,7 +298,15 @@ public sealed class Plugin : IDalamudPlugin
                     pluginLog.Information($"[TeraSync] Registering command: /{command}");
                     var commandInfo = new CommandInfo((cmd, args) => {
                         pluginLog.Information($"[TeraSync] Command /{command} executed!");
-                        action();
+                        try 
+                        {
+                            action();
+                            pluginLog.Information($"[TeraSync] Command /{command} action completed successfully!");
+                        }
+                        catch (Exception ex)
+                        {
+                            pluginLog.Error(ex, $"[TeraSync] Exception in /{command} command action");
+                        }
                     })
                     {
                         HelpMessage = "Open Resonance Federation UI",
