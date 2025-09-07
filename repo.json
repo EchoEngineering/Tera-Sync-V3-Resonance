@@ -5,7 +5,7 @@
     "Punchline": "Cross-fork sync with Resonance federation",
     "Description": "Cross-fork synchronization using Resonance federation. Share appearance/mods with users on different Mare clients (TeraSync, Neko Net, etc.). Use /resonance or /res commands to access federation UI.",
     "InternalName": "TeraSyncV3",
-    "AssemblyVersion": "3.0.1.4",
+    "AssemblyVersion": "3.0.1.5",
     "RepoUrl": "https://github.com/EchoEngineering/Tera-Sync-V3-Resonance",
     "ApplicableVersion": "any",
     "Tags": [
@@ -33,6 +33,6 @@
     "DownloadLinkTesting": "https://raw.githubusercontent.com/EchoEngineering/Tera-Sync-V3-Resonance/main/Tera-Sync-V2-client/latest.zip",
     "DownloadLinkUpdate": "https://raw.githubusercontent.com/EchoEngineering/Tera-Sync-V3-Resonance/main/Tera-Sync-V2-client/latest.zip",
     "DownloadCount": 0,
-    "LastUpdated": "2025-09-07T01:00:00.000Z"
+    "LastUpdated": "2025-09-07T18:12:00.000Z"
   }
 ]
