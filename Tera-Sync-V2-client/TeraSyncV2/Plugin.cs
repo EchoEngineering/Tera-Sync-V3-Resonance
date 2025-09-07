@@ -277,12 +277,12 @@ public sealed class Plugin : IDalamudPlugin
                 DatabasePath = Path.Combine(pluginInterface.ConfigDirectory.FullName, "resonance.db"),
                 EnableDebugLogging = true, // Enable debug logging to see SDK internals
                 
-                // TODO: Fork maintainers should configure these values for their fork
-                ServiceToken = "YOUR-SERVICE-TOKEN-HERE", // Get this after registering with Resonance admin
-                ContactEmail = "admin@your-fork.example", // Your fork's contact email
+                // TeraSync V3 Fork Configuration
+                ServiceToken = null, // Will be generated on first registration
+                ContactEmail = "kirin@resonancesync.app", // TeraSync admin email
                 PdsEndpoint = "embedded", // Use embedded PDS for simplicity
-                DisplayName = "YourForkName", // Display name for your fork
-                Description = "Your fork description - what makes your fork unique",
+                DisplayName = "TeraSync V3", // Display name for your fork
+                Description = "TeraSync V3 - Advanced Mare fork with Resonance federation support",
                 
                 // Optional configuration - adjust based on your fork's capacity
                 MaxUsers = 1000,
@@ -307,7 +307,7 @@ public sealed class Plugin : IDalamudPlugin
                 try
                 {
                     pluginLog.Debug("[Resonance] Async task started - calling InitializeAsync");
-                    var success = await _resonanceClient.InitializeAsync("YourForkName"); // TODO: Use your fork's identifier
+                    var success = await _resonanceClient.InitializeAsync("TeraSyncV3"); // TeraSync V3 fork identifier
                     pluginLog.Information("[Resonance] InitializeAsync returned: {0}", success);
                     
                     if (success)
