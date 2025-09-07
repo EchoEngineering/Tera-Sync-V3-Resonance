@@ -264,64 +264,136 @@ public sealed class Plugin : IDalamudPlugin
         _ = _host.StartAsync();
         
         // Initialize Resonance SDK for cross-fork federation
+        pluginLog.Debug("[Resonance] === Starting Resonance SDK Integration ===");
+        pluginLog.Debug("[Resonance] Plugin interface valid: {0}", pluginInterface != null);
+        pluginLog.Debug("[Resonance] Command manager valid: {0}", commandManager != null);
+        pluginLog.Debug("[Resonance] Config directory: {0}", pluginInterface.ConfigDirectory.FullName);
+        
         try
         {
             // Create Resonance client with embedded PDS
             var resonanceConfig = new ResonanceConfig
             {
                 DatabasePath = Path.Combine(pluginInterface.ConfigDirectory.FullName, "resonance.db"),
-                EnableDebugLogging = false
+                EnableDebugLogging = true, // Enable debug logging to see SDK internals
+                
+                // Required for federation registration - TeraSync as primary/admin fork
+                AggregatorRegistrationKey = "terasync-admin-key-2025", // Admin registration key
+                ContactEmail = "admin@terasync.app",
+                PdsEndpoint = "embedded", // Use embedded PDS for simplicity
+                DisplayName = "TeraSync",
+                Description = "Primary TeraSync client - official Resonance federation hub",
+                
+                // Optional configuration - TeraSync as flagship fork
+                MaxUsers = 10000,
+                SupportedFeatures = new[] { "character_sync", "mod_federation", "cross_fork_discovery", "admin_controls" }
             };
             
-            pluginLog.Information($"[TeraSync] Creating ResonanceClient with DB path: {resonanceConfig.DatabasePath}");
+            pluginLog.Debug("[Resonance] Config created:");
+            pluginLog.Debug("[Resonance]   - DatabasePath: {0}", resonanceConfig.DatabasePath);
+            pluginLog.Debug("[Resonance]   - EnableDebugLogging: {0}", resonanceConfig.EnableDebugLogging);
+            pluginLog.Debug("[Resonance]   - DisplayName: {0}", resonanceConfig.DisplayName);
+            pluginLog.Debug("[Resonance]   - PdsEndpoint: {0}", resonanceConfig.PdsEndpoint);
+            
+            pluginLog.Information("[Resonance] Creating ResonanceClient instance");
             _resonanceClient = new ResonanceClient(resonanceConfig);
-            pluginLog.Information("[TeraSync] ResonanceClient created successfully!");
+            pluginLog.Information("[Resonance] ResonanceClient instance created successfully");
+            pluginLog.Debug("[Resonance] ResonanceClient type: {0}", _resonanceClient?.GetType().FullName ?? "null");
             
             // Initialize federation for TeraSync in background
+            pluginLog.Debug("[Resonance] Starting async initialization task");
             Task.Run(async () =>
             {
                 try
                 {
-                    await _resonanceClient.InitializeAsync("TeraSync");
+                    pluginLog.Debug("[Resonance] Async task started - calling InitializeAsync");
+                    var success = await _resonanceClient.InitializeAsync("TeraSync");
+                    pluginLog.Information("[Resonance] InitializeAsync returned: {0}", success);
+                    
+                    if (success)
+                    {
+                        pluginLog.Debug("[Resonance] Initialization successful, enabling Dalamud integration");
+                        // Enable IPC integration so TeraSync's existing calls to Resonance.PublishData work
+                        var ipcIntegration = _resonanceClient.EnableDalamudIntegration(pluginInterface);
+                        pluginLog.Information("[Resonance] IPC integration enabled - result: {0}", ipcIntegration != null);
+                    }
+                    else
+                    {
+                        pluginLog.Warning("[Resonance] InitializeAsync failed - federation not enabled");
+                    }
                 }
                 catch (Exception ex)
                 {
-                    pluginLog.Error(ex, "Failed to initialize Resonance federation");
+                    pluginLog.Error(ex, "[Resonance] Exception in async initialization");
                 }
             });
             
             // Register the UI - adds /resonance and /res commands  
-            pluginLog.Information("[TeraSync] Creating Resonance UI integration...");
+            pluginLog.Information("[Resonance] Creating UI integration");
+            pluginLog.Debug("[Resonance] Calling CreateUIIntegration with fork name: TeraSync");
+            
             _resonanceUi = _resonanceClient.CreateUIIntegration("TeraSync", 
                 (command, action) =>
                 {
-                    pluginLog.Information($"[TeraSync] Registering command: /{command}");
+                    pluginLog.Information("[Resonance] Command registration callback invoked for: /{0}", command);
+                    pluginLog.Debug("[Resonance] Action delegate is null: {0}", action == null);
+                    
                     var commandInfo = new CommandInfo((cmd, args) => {
-                        pluginLog.Information($"[TeraSync] Command /{command} executed!");
+                        pluginLog.Information("[Resonance] === Command Execution Started ===");
+                        pluginLog.Information("[Resonance] Command: {0}, Args: {1}", cmd, args ?? "(none)");
+                        pluginLog.Debug("[Resonance] Thread ID: {0}", System.Threading.Thread.CurrentThread.ManagedThreadId);
+                        pluginLog.Debug("[Resonance] Action delegate about to be invoked");
+                        
                         try 
                         {
+                            if (action == null)
+                            {
+                                pluginLog.Error("[Resonance] Action delegate is null - cannot execute command");
+                                return;
+                            }
+                            
+                            pluginLog.Debug("[Resonance] Invoking action delegate");
                             action();
-                            pluginLog.Information($"[TeraSync] Command /{command} action completed successfully!");
+                            pluginLog.Information("[Resonance] Action delegate completed without exception");
                         }
                         catch (Exception ex)
                         {
-                            pluginLog.Error(ex, $"[TeraSync] Exception in /{command} command action");
+                            pluginLog.Error(ex, "[Resonance] Exception during command execution");
+                            pluginLog.Error("[Resonance] Exception type: {0}", ex.GetType().FullName);
+                            pluginLog.Error("[Resonance] Exception message: {0}", ex.Message);
+                            pluginLog.Error("[Resonance] Stack trace: {0}", ex.StackTrace);
+                        }
+                        finally
+                        {
+                            pluginLog.Information("[Resonance] === Command Execution Ended ===");
                         }
                     })
                     {
                         HelpMessage = "Open Resonance Federation UI",
                         ShowInHelp = true
                     };
+                    
+                    pluginLog.Debug("[Resonance] Adding handler for command: /{0}", command);
                     commandManager.AddHandler($"/{command}", commandInfo);
-                    pluginLog.Information($"[TeraSync] Command /{command} registered successfully!");
+                    pluginLog.Information("[Resonance] Command /{0} registered successfully", command);
                 },
-                pluginInterface.UiBuilder
+                pluginInterface.UiBuilder,
+                pluginLog // Pass the IPluginLog to the SDK
             );
-            pluginLog.Information("[TeraSync] Resonance UI integration created successfully!");
+            
+            pluginLog.Information("[Resonance] UI integration result: {0}", _resonanceUi != null ? "Success" : "Failed");
+            pluginLog.Debug("[Resonance] UI integration type: {0}", _resonanceUi?.GetType().FullName ?? "null");
         }
         catch (Exception ex)
         {
-            pluginLog.Error(ex, "Failed to set up Resonance SDK");
+            pluginLog.Error(ex, "[Resonance] Failed to set up SDK");
+            pluginLog.Error("[Resonance] Exception type: {0}", ex.GetType().FullName);
+            pluginLog.Error("[Resonance] Exception message: {0}", ex.Message);
+            pluginLog.Error("[Resonance] Stack trace: {0}", ex.StackTrace);
+        }
+        finally
+        {
+            pluginLog.Debug("[Resonance] === SDK Integration Complete ===");
         }
     }
 
