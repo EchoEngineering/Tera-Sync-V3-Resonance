@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Dalamud.NET.Sdk/13.0.0">
   <PropertyGroup>
-    <Authors>kirin-xiv</Authors>
-    <Company>kirin-xiv</Company>
-    <Version>3.0.0.6</Version>
+    <Authors>Echo Engineering</Authors>
+    <Company>Echo Engineering</Company>
+    <Version>3.0.0.7</Version>
     <Description>Cross-fork sync using Resonance federation. Share appearance/mods with users on different Mare clients (TeraSync, Neko Net, etc.). Use /resonance or /res to access federation UI.</Description>
-    <Copyright>Copyright © kirin-xiv 2024</Copyright>
+    <Copyright>Copyright © Echo Engineering 2024</Copyright>
     <PackageProjectUrl>https://github.com/EchoEngineering/TeraSyncV3-Resonance</PackageProjectUrl>
-    <AssemblyVersion>3.0.0.6</AssemblyVersion>
+    <AssemblyVersion>3.0.0.7</AssemblyVersion>
     <AssemblyName>TeraSyncV3</AssemblyName>
   </PropertyGroup>
 

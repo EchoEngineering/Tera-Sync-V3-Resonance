@@ -166,16 +166,6 @@
         "resolved": "7.0.0",
         "contentHash": "to99aLL5Gev1GOb2gUao/UZXT/uXMyjEmHPNrf/vJI2HBD1LMCTeC4SBCe/cqMIB12V9v+eSieq7ff0lju9pOQ=="
       },
-      "ImGui.NET": {
-        "type": "Transitive",
-        "resolved": "1.90.5.1",
-        "contentHash": "rHm+a4tZbqjoIYP7bqA9uHTgDEH7I8eQDbTYo00L2Iq3644juR7M8mg+H3WPhrB+kfUO41dQfQeJJ4f+llBqNA==",
-        "dependencies": {
-          "System.Buffers": "4.4.0",
-          "System.Numerics.Vectors": "4.4.0",
-          "System.Runtime.CompilerServices.Unsafe": "4.4.0"
-        }
-      },
       "IpfsShipyard.Ipfs.Core": {
         "type": "Transitive",
         "resolved": "0.6.0",
@@ -650,11 +640,6 @@
           "SQLitePCLRaw.core": "2.1.10"
         }
       },
-      "System.Buffers": {
-        "type": "Transitive",
-        "resolved": "4.4.0",
-        "contentHash": "AwarXzzoDwX6BgrhjoJsk6tUezZEozOT5Y9QKF94Gl4JK91I4PIIBkBco9068Y9/Dra8Dkbie99kXB8+1BaYKw=="
-      },
       "System.Diagnostics.EventLog": {
         "type": "Transitive",
         "resolved": "9.0.3",
@@ -670,16 +655,6 @@
         "resolved": "9.0.3",
         "contentHash": "Vs/C2V27bjtwLqYag9ATzHilcUn8VQTICre4jSBMGFUeSTxEZffTjb+xZwjcmPsVAjmSZmBI5N7Ezq8UFvqQQg=="
       },
-      "System.Numerics.Vectors": {
-        "type": "Transitive",
-        "resolved": "4.4.0",
-        "contentHash": "UiLzLW+Lw6HLed1Hcg+8jSRttrbuXv7DANVj0DkL9g6EnnzbL75EB7EWsw5uRbhxd/4YdG8li5XizGWepmG3PQ=="
-      },
-      "System.Runtime.CompilerServices.Unsafe": {
-        "type": "Transitive",
-        "resolved": "4.4.0",
-        "contentHash": "9dLLuBxr5GNmOfl2jSMcsHuteEg32BEfUotmmUkmZjpR3RpVHE8YQwt0ow3p6prwA1ME8WqDVZqrr8z6H8G+Kw=="
-      },
       "System.Threading.Channels": {
         "type": "Transitive",
         "resolved": "9.0.3",
@@ -690,7 +665,6 @@
         "dependencies": {
           "Dapper": "[2.1.35, )",
           "FishyFlip": "[3.1.2, )",
-          "ImGui.NET": "[1.90.4.1, )",
           "MessagePack": "[2.5.187, )",
           "Microsoft.Data.Sqlite": "[9.0.0, )",
           "Refit": "[7.2.22, )",

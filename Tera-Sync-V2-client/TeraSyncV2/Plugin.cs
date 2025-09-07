@@ -264,7 +264,6 @@ public sealed class Plugin : IDalamudPlugin
         // Initialize Resonance SDK for cross-fork federation
         try
         {
-            pluginLog.Information("Starting Resonance SDK setup...");
             // Create Resonance client with embedded PDS
             var resonanceConfig = new ResonanceConfig
             {
@@ -272,58 +271,33 @@ public sealed class Plugin : IDalamudPlugin
                 EnableDebugLogging = false
             };
             
-            pluginLog.Information("Creating ResonanceClient...");
             _resonanceClient = new ResonanceClient(resonanceConfig);
-            pluginLog.Information("ResonanceClient created successfully");
             
-            // Initialize federation for TeraSync
-            pluginLog.Information("Starting background federation initialization...");
+            // Initialize federation for TeraSync in background
             Task.Run(async () =>
             {
                 try
                 {
                     await _resonanceClient.InitializeAsync("TeraSync");
-                    pluginLog.Information("Resonance federation initialized for TeraSync");
                 }
                 catch (Exception ex)
                 {
                     pluginLog.Error(ex, "Failed to initialize Resonance federation");
                 }
             });
-            pluginLog.Information("Background federation task started");
             
             // Register the UI - adds /resonance and /res commands  
-            try
-            {
-                pluginLog.Information("Creating Resonance UI integration...");
-                _resonanceUi = _resonanceClient.CreateUIIntegration("TeraSync", 
-                    (command, action) =>
+            _resonanceUi = _resonanceClient.CreateUIIntegration("TeraSync", 
+                (command, action) =>
+                {
+                    var commandInfo = new CommandInfo((cmd, args) => action())
                     {
-                        pluginLog.Information($"Registering command: /{command}");
-                        try
-                        {
-                            var commandInfo = new CommandInfo((cmd, args) => action())
-                            {
-                                HelpMessage = $"Open Resonance Federation UI"
-                            };
-                            commandManager.AddHandler($"/{command}", commandInfo);
-                            pluginLog.Information($"Successfully registered command: /{command}");
-                        }
-                        catch (Exception cmdEx)
-                        {
-                            pluginLog.Error(cmdEx, $"Failed to register command /{command}");
-                        }
-                    },
-                    pluginInterface.UiBuilder // Pass UiBuilder for automatic drawing registration
-                );
-                pluginLog.Information("Resonance UI integration created successfully");
-            }
-            catch (Exception uiEx)
-            {
-                pluginLog.Error(uiEx, "Failed to create Resonance UI integration");
-            }
-            
-            pluginLog.Information("Resonance SDK initialized - federation ready with /resonance and /res commands");
+                        HelpMessage = "Open Resonance Federation UI"
+                    };
+                    commandManager.AddHandler($"/{command}", commandInfo);
+                },
+                pluginInterface.UiBuilder
+            );
         }
         catch (Exception ex)
         {
