@@ -330,9 +330,9 @@ public sealed class Plugin : IDalamudPlugin
             
             // Register the UI - adds /resonance and /res commands  
             pluginLog.Information("[Resonance] Creating UI integration");
-            pluginLog.Debug("[Resonance] Calling CreateUIIntegration with fork name: YourForkName");
+            pluginLog.Debug("[Resonance] Calling CreateUIIntegration with fork name: TeraSyncV3");
             
-            _resonanceUi = _resonanceClient.CreateUIIntegration("YourForkName", // TODO: Use your fork's identifier 
+            _resonanceUi = _resonanceClient.CreateUIIntegration("TeraSyncV3", // TeraSyncV3 fork identifier 
                 (command, action) =>
                 {
                     pluginLog.Information("[Resonance] Command registration callback invoked for: /{0}", command);
