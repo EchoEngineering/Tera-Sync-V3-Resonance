@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Authors>Echo Engineering</Authors>
     <Company>Echo Engineering</Company>
-    <Version>3.0.1.1</Version>
+    <Version>3.0.1.2</Version>
     <Description>Cross-fork sync using Resonance federation. Share appearance/mods with users on different Mare clients (TeraSync, Neko Net, etc.). Use /resonance or /res to access federation UI.</Description>
     <Copyright>Copyright © Echo Engineering 2025</Copyright>
     <PackageProjectUrl>https://github.com/EchoEngineering/TeraSyncV3-Resonance</PackageProjectUrl>
-    <AssemblyVersion>3.0.1.1</AssemblyVersion>
+    <AssemblyVersion>3.0.1.2</AssemblyVersion>
     <AssemblyName>TeraSyncV3</AssemblyName>
   </PropertyGroup>
 
