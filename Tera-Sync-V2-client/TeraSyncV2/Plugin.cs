@@ -287,17 +287,25 @@ public sealed class Plugin : IDalamudPlugin
             });
             
             // Register the UI - adds /resonance and /res commands  
+            pluginLog.Information("[TeraSync] Creating Resonance UI integration...");
             _resonanceUi = _resonanceClient.CreateUIIntegration("TeraSync", 
                 (command, action) =>
                 {
-                    var commandInfo = new CommandInfo((cmd, args) => action())
+                    pluginLog.Information($"[TeraSync] Registering command: /{command}");
+                    var commandInfo = new CommandInfo((cmd, args) => {
+                        pluginLog.Information($"[TeraSync] Command /{command} executed!");
+                        action();
+                    })
                     {
-                        HelpMessage = "Open Resonance Federation UI"
+                        HelpMessage = "Open Resonance Federation UI",
+                        ShowInHelp = true
                     };
                     commandManager.AddHandler($"/{command}", commandInfo);
+                    pluginLog.Information($"[TeraSync] Command /{command} registered successfully!");
                 },
                 pluginInterface.UiBuilder
             );
+            pluginLog.Information("[TeraSync] Resonance UI integration created successfully!");
         }
         catch (Exception ex)
         {
