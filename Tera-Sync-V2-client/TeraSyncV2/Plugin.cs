@@ -307,7 +307,7 @@ public sealed class Plugin : IDalamudPlugin
                 try
                 {
                     pluginLog.Debug("[Resonance] Async task started - calling InitializeAsync");
-                    var success = await _resonanceClient.InitializeAsync("TeraSyncV3"); // TeraSync V3 fork identifier
+                    var success = await _resonanceClient.InitializeAsync("Tera Sync"); // Tera Sync fork identifier
                     pluginLog.Information("[Resonance] InitializeAsync returned: {0}", success);
                     
                     if (success)
@@ -330,9 +330,9 @@ public sealed class Plugin : IDalamudPlugin
             
             // Register the UI - adds /resonance and /res commands  
             pluginLog.Information("[Resonance] Creating UI integration");
-            pluginLog.Debug("[Resonance] Calling CreateUIIntegration with fork name: TeraSyncV3");
+            pluginLog.Debug("[Resonance] Calling CreateUIIntegration with fork name: Tera Sync");
             
-            _resonanceUi = _resonanceClient.CreateUIIntegration("TeraSyncV3", // TeraSyncV3 fork identifier 
+            _resonanceUi = _resonanceClient.CreateUIIntegration("Tera Sync", // Tera Sync fork identifier 
                 (command, action) =>
                 {
                     pluginLog.Information("[Resonance] Command registration callback invoked for: /{0}", command);
