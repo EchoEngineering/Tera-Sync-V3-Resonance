@@ -278,8 +278,8 @@ public sealed class Plugin : IDalamudPlugin
                 EnableDebugLogging = true, // Enable debug logging to see SDK internals
                 
                 // TeraSync V3 Fork Configuration
-                ServiceToken = null, // Will be generated on first registration
-                ContactEmail = "kirin@resonancesync.app", // TeraSync admin email
+                ServiceToken = "TERA_SYNC_SERVICE_TOKEN_581d2f59-5e81-4646-bb69-4eafc48bd0b3_OFFICIAL", // Official service token
+                ContactEmail = "kirin@tuta.com", // TeraSync admin email
                 PdsEndpoint = "embedded", // Use embedded PDS for simplicity
                 DisplayName = "TeraSync V3", // Display name for your fork
                 Description = "TeraSync V3 - Advanced Mare fork with Resonance federation support",
