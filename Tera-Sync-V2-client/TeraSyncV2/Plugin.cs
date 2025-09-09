@@ -271,32 +271,16 @@ public sealed class Plugin : IDalamudPlugin
         
         try
         {
-            // Create Resonance client with embedded PDS
-            var resonanceConfig = new ResonanceConfig
-            {
-                DatabasePath = Path.Combine(pluginInterface.ConfigDirectory.FullName, "resonance.db"),
-                EnableDebugLogging = true, // Enable debug logging to see SDK internals
-                
-                // TeraSync V3 Fork Configuration
-                ServiceToken = "TERA_SYNC_SERVICE_TOKEN_581d2f59-5e81-4646-bb69-4eafc48bd0b3_OFFICIAL", // Official service token
-                ContactEmail = "kirin@tuta.com", // TeraSync admin email
-                PdsEndpoint = "embedded", // Use embedded PDS for simplicity
-                DisplayName = "TeraSync V3", // Display name for your fork
-                Description = "TeraSync V3 - Advanced Mare fork with Resonance federation support",
-                
-                // Optional configuration - adjust based on your fork's capacity
-                MaxUsers = 1000,
-                SupportedFeatures = new[] { "character_sync", "mod_federation", "cross_fork_discovery" }
-            };
+            // Use SDK's automatic credential discovery - no hardcoded tokens!
+            pluginLog.Information("[Resonance] Initializing with credential auto-discovery");
+            pluginLog.Information("[Resonance] Looking for resonance.config in standard locations...");
             
-            pluginLog.Debug("[Resonance] Config created:");
-            pluginLog.Debug("[Resonance]   - DatabasePath: {0}", resonanceConfig.DatabasePath);
-            pluginLog.Debug("[Resonance]   - EnableDebugLogging: {0}", resonanceConfig.EnableDebugLogging);
-            pluginLog.Debug("[Resonance]   - DisplayName: {0}", resonanceConfig.DisplayName);
-            pluginLog.Debug("[Resonance]   - PdsEndpoint: {0}", resonanceConfig.PdsEndpoint);
+            // Create client with auto-discovery (SDK will find credentials automatically)
+            _resonanceClient = new ResonanceClient();
             
-            pluginLog.Information("[Resonance] Creating ResonanceClient instance");
-            _resonanceClient = new ResonanceClient(resonanceConfig);
+            pluginLog.Information("[Resonance] ResonanceClient created - will auto-discover credentials");
+            pluginLog.Information("[Resonance] If no credentials found, get them from: https://aggregator.resonancesync.app/maintainer");
+            pluginLog.Information("[Resonance] Save resonance.config to: C:\\Users\\[YourUsername]\\.resonance (Windows)");
             pluginLog.Information("[Resonance] ResonanceClient instance created successfully");
             pluginLog.Debug("[Resonance] ResonanceClient type: {0}", _resonanceClient?.GetType().FullName ?? "null");
             
@@ -307,12 +291,14 @@ public sealed class Plugin : IDalamudPlugin
                 try
                 {
                     pluginLog.Debug("[Resonance] Async task started - calling InitializeAsync");
-                    var success = await _resonanceClient.InitializeAsync("Tera Sync"); // Tera Sync fork identifier
+                    var success = await _resonanceClient.InitializeAsync("TeraSync");
                     pluginLog.Information("[Resonance] InitializeAsync returned: {0}", success);
                     
                     if (success)
                     {
                         pluginLog.Debug("[Resonance] Initialization successful, enabling Dalamud integration");
+                        pluginLog.Information("[Resonance] Federation active! TeraSync users can now sync with other Mare forks");
+                        
                         // Enable IPC integration so TeraSync's existing calls to Resonance.PublishData work
                         var ipcIntegration = _resonanceClient.EnableDalamudIntegration(pluginInterface);
                         pluginLog.Information("[Resonance] IPC integration enabled - result: {0}", ipcIntegration != null);
@@ -320,6 +306,8 @@ public sealed class Plugin : IDalamudPlugin
                     else
                     {
                         pluginLog.Warning("[Resonance] InitializeAsync failed - federation not enabled");
+                        pluginLog.Warning("[Resonance] Make sure resonance.config is in C:\\Users\\[YourUsername]\\.resonance");
+                        pluginLog.Warning("[Resonance] Get your credentials from: https://aggregator.resonancesync.app/maintainer");
                     }
                 }
                 catch (Exception ex)
