@@ -1,0 +1,38 @@
+[
+  {
+    "Author": "Echo Engineering",
+    "Name": "TeraSync V3 (Resonance)",
+    "Punchline": "Reuniting the Mare community across forks",
+    "Description": "Cross-fork discovery and synchronization with enhanced UI. Reconnect with users from different Mare communities using the new Resonance federation UI featuring async operations, notifications, and streamlined workflows.",
+    "InternalName": "TeraSyncV3",
+    "AssemblyVersion": "3.3.0.0",
+    "RepoUrl": "https://github.com/EchoEngineering/Tera-Sync-V3-Resonance",
+    "ApplicableVersion": "any",
+    "Tags": [
+      "customization",
+      "penumbra",
+      "glamourer",
+      "synchronization",
+      "appearance",
+      "mods",
+      "sharing",
+      "social",
+      "experimental",
+      "resonance",
+      "cross-fork"
+    ],
+    "DalamudApiLevel": 13,
+    "LoadRequiredState": 0,
+    "LoadSync": false,
+    "CanUnloadAsync": false,
+    "LoadPriority": 0,
+    "ImageUrls": [],
+    "DownloadLinkInstall": "https://raw.githubusercontent.com/EchoEngineering/Tera-Sync-V3-Resonance/main/Tera-Sync-V2-client/latest.zip",
+    "IsHide": false,
+    "IsTestingExclusive": false,
+    "DownloadLinkTesting": "https://raw.githubusercontent.com/EchoEngineering/Tera-Sync-V3-Resonance/main/Tera-Sync-V2-client/latest.zip",
+    "DownloadLinkUpdate": "https://raw.githubusercontent.com/EchoEngineering/Tera-Sync-V3-Resonance/main/Tera-Sync-V2-client/latest.zip",
+    "DownloadCount": 0,
+    "LastUpdated": "2025-09-11T17:45:00.000Z"
+  }
+]
