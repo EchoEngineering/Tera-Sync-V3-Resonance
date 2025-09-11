@@ -1,9 +1,9 @@
 {
   "Author": "Echo Engineering",
   "Name": "TeraSync V3 (Resonance)",
-  "Punchline": "Cross-fork sync with Resonance federation",
-  "Description": "Cross-fork synchronization using Resonance federation. Share appearance/mods with users on different Mare clients (TeraSync, Neko Net, etc.). Use /resonance or /res commands to access federation UI.",
   "InternalName": "TeraSyncV3",
+  "AssemblyVersion": "3.2.1.0",
+  "Description": "Cross-fork synchronization using Resonance federation. Share appearance/mods with users on different Mare clients (TeraSync, Neko Net, etc.). Use /resonance or /res commands to access federation UI.",
   "ApplicableVersion": "any",
   "Tags": [
     "customization",
@@ -17,5 +17,12 @@
     "experimental",
     "resonance",
     "cross-fork"
-  ]
+  ],
+  "DalamudApiLevel": 13,
+  "LoadRequiredState": 0,
+  "LoadSync": false,
+  "CanUnloadAsync": false,
+  "LoadPriority": 0,
+  "Punchline": "Cross-fork sync with Resonance federation",
+  "AcceptsFeedback": true
 }
