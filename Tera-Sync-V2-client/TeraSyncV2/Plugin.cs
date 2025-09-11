@@ -37,6 +37,9 @@ namespace TeraSyncV2;
 
 public sealed class Plugin : IDalamudPlugin
 {
+    // Baked into TeraSync client at build time - identifies this fork in Resonance federation
+    private const string FORK_IDENTIFIER = "TeraSync";
+    
     private readonly IHost _host;
     private readonly IResonanceClient _resonanceClient;
     private readonly IDisposable? _resonanceUi;
@@ -264,124 +267,77 @@ public sealed class Plugin : IDalamudPlugin
         _ = _host.StartAsync();
         
         // Initialize Resonance SDK for cross-fork federation
-        pluginLog.Debug("[Resonance] === Starting Resonance SDK Integration ===");
-        pluginLog.Debug("[Resonance] Plugin interface valid: {0}", pluginInterface != null);
-        pluginLog.Debug("[Resonance] Command manager valid: {0}", commandManager != null);
-        pluginLog.Debug("[Resonance] Config directory: {0}", pluginInterface.ConfigDirectory.FullName);
+        pluginLog.Information("[Resonance] === Starting Resonance Federation for {0} ===", FORK_IDENTIFIER);
+        pluginLog.Information("[Resonance] This client will identify as: {0}", FORK_IDENTIFIER);
         
         try
         {
-            // Use SDK's automatic credential discovery - no hardcoded tokens!
-            pluginLog.Information("[Resonance] Initializing with credential auto-discovery");
-            pluginLog.Information("[Resonance] Looking for resonance.config in standard locations...");
-            
-            // Create client with auto-discovery (SDK will find credentials automatically)
+            // Create client for fork-level federation (no user credentials required)
             _resonanceClient = new ResonanceClient();
+            pluginLog.Information("[Resonance] ResonanceClient created for fork: {0}", FORK_IDENTIFIER);
             
-            pluginLog.Information("[Resonance] ResonanceClient created - will auto-discover credentials");
-            pluginLog.Information("[Resonance] If no credentials found, get them from: https://aggregator.resonancesync.app/maintainer");
-            pluginLog.Information("[Resonance] Save resonance.config to: C:\\Users\\[YourUsername]\\.resonance (Windows)");
-            pluginLog.Information("[Resonance] ResonanceClient instance created successfully");
-            pluginLog.Debug("[Resonance] ResonanceClient type: {0}", _resonanceClient?.GetType().FullName ?? "null");
-            
-            // Initialize federation for TeraSync in background
-            pluginLog.Debug("[Resonance] Starting async initialization task");
+            // Initialize federation using baked-in fork identifier
             Task.Run(async () =>
             {
                 try
                 {
-                    pluginLog.Debug("[Resonance] Async task started - calling InitializeAsync");
-                    var success = await _resonanceClient.InitializeAsync("TeraSync");
-                    pluginLog.Information("[Resonance] InitializeAsync returned: {0}", success);
+                    pluginLog.Information("[Resonance] Initializing federation for fork: {0}", FORK_IDENTIFIER);
+                    var success = await _resonanceClient.InitializeAsync(FORK_IDENTIFIER);
+                    pluginLog.Information("[Resonance] Federation initialization result: {0}", success);
                     
                     if (success)
                     {
-                        pluginLog.Debug("[Resonance] Initialization successful, enabling Dalamud integration");
-                        pluginLog.Information("[Resonance] Federation active! TeraSync users can now sync with other Mare forks");
+                        pluginLog.Information("[Resonance] Federation active! {0} users can now discover users from other Mare forks", FORK_IDENTIFIER);
                         
-                        // Enable IPC integration so TeraSync's existing calls to Resonance.PublishData work
+                        // Enable IPC integration for TeraSync's existing federation calls
                         var ipcIntegration = _resonanceClient.EnableDalamudIntegration(pluginInterface);
-                        pluginLog.Information("[Resonance] IPC integration enabled - result: {0}", ipcIntegration != null);
+                        pluginLog.Information("[Resonance] IPC integration enabled: {0}", ipcIntegration != null);
                     }
                     else
                     {
-                        pluginLog.Warning("[Resonance] InitializeAsync failed - federation not enabled");
-                        pluginLog.Warning("[Resonance] Make sure resonance.config is in C:\\Users\\[YourUsername]\\.resonance");
-                        pluginLog.Warning("[Resonance] Get your credentials from: https://aggregator.resonancesync.app/maintainer");
+                        pluginLog.Warning("[Resonance] Federation initialization failed for {0}", FORK_IDENTIFIER);
+                        pluginLog.Warning("[Resonance] Cross-fork discovery will not be available");
                     }
                 }
                 catch (Exception ex)
                 {
-                    pluginLog.Error(ex, "[Resonance] Exception in async initialization");
+                    pluginLog.Error(ex, "[Resonance] Exception during federation initialization for {0}", FORK_IDENTIFIER);
                 }
             });
             
-            // Register the UI - adds /resonance and /res commands  
-            pluginLog.Information("[Resonance] Creating UI integration");
-            pluginLog.Debug("[Resonance] Calling CreateUIIntegration with fork name: Tera Sync");
+            // Register UI for cross-fork discovery - adds /resonance and /res commands  
+            pluginLog.Information("[Resonance] Registering cross-fork discovery UI for {0}", FORK_IDENTIFIER);
             
-            _resonanceUi = _resonanceClient.CreateUIIntegration("Tera Sync", // Tera Sync fork identifier 
+            _resonanceUi = _resonanceClient.CreateUIIntegration(FORK_IDENTIFIER,
                 (command, action) =>
                 {
-                    pluginLog.Information("[Resonance] Command registration callback invoked for: /{0}", command);
-                    pluginLog.Debug("[Resonance] Action delegate is null: {0}", action == null);
-                    
                     var commandInfo = new CommandInfo((cmd, args) => {
-                        pluginLog.Information("[Resonance] === Command Execution Started ===");
-                        pluginLog.Information("[Resonance] Command: {0}, Args: {1}", cmd, args ?? "(none)");
-                        pluginLog.Debug("[Resonance] Thread ID: {0}", System.Threading.Thread.CurrentThread.ManagedThreadId);
-                        pluginLog.Debug("[Resonance] Action delegate about to be invoked");
-                        
                         try 
                         {
-                            if (action == null)
-                            {
-                                pluginLog.Error("[Resonance] Action delegate is null - cannot execute command");
-                                return;
-                            }
-                            
-                            pluginLog.Debug("[Resonance] Invoking action delegate");
-                            action();
-                            pluginLog.Information("[Resonance] Action delegate completed without exception");
+                            action?.Invoke();
                         }
                         catch (Exception ex)
                         {
-                            pluginLog.Error(ex, "[Resonance] Exception during command execution");
-                            pluginLog.Error("[Resonance] Exception type: {0}", ex.GetType().FullName);
-                            pluginLog.Error("[Resonance] Exception message: {0}", ex.Message);
-                            pluginLog.Error("[Resonance] Stack trace: {0}", ex.StackTrace);
-                        }
-                        finally
-                        {
-                            pluginLog.Information("[Resonance] === Command Execution Ended ===");
+                            pluginLog.Error(ex, "[Resonance] Error executing /{0} command", command);
                         }
                     })
                     {
-                        HelpMessage = "Open Resonance Federation UI",
+                        HelpMessage = "Open Resonance cross-fork discovery UI",
                         ShowInHelp = true
                     };
                     
-                    pluginLog.Debug("[Resonance] Adding handler for command: /{0}", command);
                     commandManager.AddHandler($"/{command}", commandInfo);
-                    pluginLog.Information("[Resonance] Command /{0} registered successfully", command);
+                    pluginLog.Information("[Resonance] Command /{0} registered for cross-fork discovery", command);
                 },
                 pluginInterface.UiBuilder,
-                pluginLog // Pass the IPluginLog to the SDK
+                pluginLog
             );
             
-            pluginLog.Information("[Resonance] UI integration result: {0}", _resonanceUi != null ? "Success" : "Failed");
-            pluginLog.Debug("[Resonance] UI integration type: {0}", _resonanceUi?.GetType().FullName ?? "null");
+            pluginLog.Information("[Resonance] Cross-fork discovery UI initialized: {0}", _resonanceUi != null);
         }
         catch (Exception ex)
         {
-            pluginLog.Error(ex, "[Resonance] Failed to set up SDK");
-            pluginLog.Error("[Resonance] Exception type: {0}", ex.GetType().FullName);
-            pluginLog.Error("[Resonance] Exception message: {0}", ex.Message);
-            pluginLog.Error("[Resonance] Stack trace: {0}", ex.StackTrace);
-        }
-        finally
-        {
-            pluginLog.Debug("[Resonance] === SDK Integration Complete ===");
+            pluginLog.Error(ex, "[Resonance] Failed to initialize federation for {0}", FORK_IDENTIFIER);
         }
     }
 
