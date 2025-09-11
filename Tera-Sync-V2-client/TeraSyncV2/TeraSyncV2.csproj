@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Authors>Echo Engineering</Authors>
     <Company>Echo Engineering</Company>
-    <Version>3.2.0.0</Version>
+    <Version>3.2.1.0</Version>
     <Description>Cross-fork sync using Resonance federation with friends list system. Features real-time sync, user-controlled permissions, cross-fork discovery, and request/approval workflow across Mare communities.</Description>
     <Copyright>Copyright © Echo Engineering 2025</Copyright>
     <PackageProjectUrl>https://github.com/EchoEngineering/TeraSyncV3-Resonance</PackageProjectUrl>
-    <AssemblyVersion>3.2.0.0</AssemblyVersion>
+    <AssemblyVersion>3.2.1.0</AssemblyVersion>
     <AssemblyName>TeraSyncV3</AssemblyName>
   </PropertyGroup>
 

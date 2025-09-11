@@ -5,7 +5,7 @@
     "Punchline": "Reuniting the Mare community across forks",
     "Description": "Attempts to enable cross-fork discovery and synchronization. Reconnect with users from different Mare communities and discover new character customizations across the entire Mare ecosystem.",
     "InternalName": "TeraSyncV3",
-    "AssemblyVersion": "3.1.0.0",
+    "AssemblyVersion": "3.2.1.0",
     "RepoUrl": "https://github.com/EchoEngineering/Tera-Sync-V3-Resonance",
     "ApplicableVersion": "any",
     "Tags": [
