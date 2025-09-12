@@ -41,8 +41,7 @@ public sealed class Plugin : IDalamudPlugin
     private const string FORK_IDENTIFIER = "TeraSync";
     
     private readonly IHost _host;
-    private readonly IResonanceClient _resonanceClient;
-    private readonly IDisposable? _resonanceUi;
+    private readonly IDisposable? _resonance;
 
     public Plugin(IDalamudPluginInterface pluginInterface, ICommandManager commandManager, IDataManager gameData,
         IFramework framework, IObjectTable objectTable, IClientState clientState, ICondition condition, IChatGui chatGui,
@@ -266,85 +265,13 @@ public sealed class Plugin : IDalamudPlugin
 
         _ = _host.StartAsync();
         
-        // Initialize Resonance SDK for cross-fork federation
-        pluginLog.Information("[Resonance] === Starting Resonance Federation for {0} ===", FORK_IDENTIFIER);
-        pluginLog.Information("[Resonance] This client will identify as: {0}", FORK_IDENTIFIER);
-        
-        try
-        {
-            // Create client for fork-level federation (no user credentials required)
-            _resonanceClient = new ResonanceClient();
-            pluginLog.Information("[Resonance] ResonanceClient created for fork: {0}", FORK_IDENTIFIER);
-            
-            // Initialize federation using baked-in fork identifier
-            Task.Run(async () =>
-            {
-                try
-                {
-                    pluginLog.Information("[Resonance] Initializing federation for fork: {0}", FORK_IDENTIFIER);
-                    var success = await _resonanceClient.InitializeAsync(FORK_IDENTIFIER);
-                    pluginLog.Information("[Resonance] Federation initialization result: {0}", success);
-                    
-                    if (success)
-                    {
-                        pluginLog.Information("[Resonance] Federation active! {0} users can now discover users from other Mare forks", FORK_IDENTIFIER);
-                        
-                        // Enable IPC integration for TeraSync's existing federation calls
-                        var ipcIntegration = _resonanceClient.EnableDalamudIntegration(pluginInterface);
-                        pluginLog.Information("[Resonance] IPC integration enabled: {0}", ipcIntegration != null);
-                    }
-                    else
-                    {
-                        pluginLog.Warning("[Resonance] Federation initialization failed for {0}", FORK_IDENTIFIER);
-                        pluginLog.Warning("[Resonance] Cross-fork discovery will not be available");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    pluginLog.Error(ex, "[Resonance] Exception during federation initialization for {0}", FORK_IDENTIFIER);
-                }
-            });
-            
-            // Register UI for cross-fork discovery - adds /resonance and /res commands  
-            pluginLog.Information("[Resonance] Registering cross-fork discovery UI for {0}", FORK_IDENTIFIER);
-            
-            _resonanceUi = _resonanceClient.CreateUIIntegration(FORK_IDENTIFIER,
-                (command, action) =>
-                {
-                    var commandInfo = new CommandInfo((cmd, args) => {
-                        try 
-                        {
-                            action?.Invoke();
-                        }
-                        catch (Exception ex)
-                        {
-                            pluginLog.Error(ex, "[Resonance] Error executing /{0} command", command);
-                        }
-                    })
-                    {
-                        HelpMessage = "Open Resonance cross-fork discovery UI",
-                        ShowInHelp = true
-                    };
-                    
-                    commandManager.AddHandler($"/{command}", commandInfo);
-                    pluginLog.Information("[Resonance] Command /{0} registered for cross-fork discovery", command);
-                },
-                pluginInterface.UiBuilder,
-                pluginLog
-            );
-            
-            pluginLog.Information("[Resonance] Cross-fork discovery UI initialized: {0}", _resonanceUi != null);
-        }
-        catch (Exception ex)
-        {
-            pluginLog.Error(ex, "[Resonance] Failed to initialize federation for {0}", FORK_IDENTIFIER);
-        }
+        // Initialize Resonance Federation
+        _resonance = ResonanceSDK.Initialize(FORK_IDENTIFIER, pluginInterface, commandManager, pluginLog);
     }
 
     public void Dispose()
     {
-        _resonanceUi?.Dispose();
-        (_resonanceClient as IDisposable)?.Dispose();
+        _resonance?.Dispose();
         _host.StopAsync().GetAwaiter().GetResult();
         _host.Dispose();
     }
