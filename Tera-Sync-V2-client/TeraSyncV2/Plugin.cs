@@ -267,6 +267,77 @@ public sealed class Plugin : IDalamudPlugin
         
         // Initialize Resonance Federation
         _resonance = ResonanceSDK.Initialize(FORK_IDENTIFIER, pluginInterface, commandManager, pluginLog);
+        
+        // Initialize hybrid authentication (PKI + bearer tokens)
+        _ = Task.Run(async () => await InitializeHybridAuthenticationAsync(pluginInterface, pluginLog));
+    }
+
+    /// <summary>
+    /// Initialize hybrid authentication for cross-fork user token minting.
+    /// Loads PKI certificate and enables TeraSync users to get bearer tokens.
+    /// </summary>
+    private async Task InitializeHybridAuthenticationAsync(IDalamudPluginInterface pluginInterface, IPluginLog pluginLog)
+    {
+        try
+        {
+            var resonanceClient = ResonanceSDK.Client;
+            if (resonanceClient == null)
+            {
+                pluginLog.Warning("[TeraSync-Resonance] Resonance client not available for hybrid auth setup");
+                return;
+            }
+
+            // Certificate paths (deployed by maintainer or downloaded from portal)
+            var configDir = pluginInterface.ConfigDirectory.FullName;
+            var certPath = Path.Combine(configDir, "terasync-cert.crt");
+            var keyPath = Path.Combine(configDir, "terasync-key.pem");
+
+            // Check if certificate files exist
+            if (!File.Exists(certPath) || !File.Exists(keyPath))
+            {
+                pluginLog.Information("[TeraSync-Resonance] PKI certificate not found - hybrid authentication unavailable");
+                pluginLog.Information("[TeraSync-Resonance] Download certificate from maintainer portal to enable user token minting");
+                return;
+            }
+
+            // Load PKI certificate for fork authentication
+            var certLoaded = await resonanceClient.LoadCertificateAsync(certPath, keyPath);
+            
+            if (certLoaded)
+            {
+                pluginLog.Information("[TeraSync-Resonance] Hybrid authentication enabled - TeraSync can mint user tokens");
+            }
+            else
+            {
+                pluginLog.Error("[TeraSync-Resonance] Failed to load PKI certificate - hybrid authentication disabled");
+            }
+        }
+        catch (Exception ex)
+        {
+            pluginLog.Error(ex, "[TeraSync-Resonance] Error initializing hybrid authentication");
+        }
+    }
+
+    /// <summary>
+    /// Mint a bearer token for a TeraSync user to access cross-fork features.
+    /// Call this when users need to search/sync with other forks.
+    /// </summary>
+    public async Task<string?> MintUserTokenAsync(string userId, string userHandle, string? displayName = null)
+    {
+        try
+        {
+            var resonanceClient = ResonanceSDK.Client;
+            if (resonanceClient == null)
+                return null;
+
+            var result = await resonanceClient.MintUserTokenAsync(userId, userHandle, displayName);
+            return result.Token;
+        }
+        catch (Exception ex)
+        {
+            // Log but don't crash - graceful degradation
+            return null;
+        }
     }
 
     public void Dispose()
