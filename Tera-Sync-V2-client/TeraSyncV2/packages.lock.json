@@ -119,9 +119,9 @@
       },
       "Resonance.SDK": {
         "type": "Direct",
-        "requested": "[1.3.6, )",
-        "resolved": "1.3.6",
-        "contentHash": "4lchZWXcOom86zARN3pAhzSZplTVWerJHwUa1MySeUnxPxnvYRRZ9+OrmgYJoIwWTS5zDnmoAR+Rm2UFTpIzcw==",
+        "requested": "[1.3.7, )",
+        "resolved": "1.3.7",
+        "contentHash": "qY9XoPfFHN2BOX3wrOoXai7Vly/nbtFDy3dgF+GH7ZSxz98DaSX6wlxuzC6HF8rLtfsM6da+O1B9GYcPM+cwTg==",
         "dependencies": {
           "DalamudPackager": "13.0.0",
           "Dapper": "2.1.35",
