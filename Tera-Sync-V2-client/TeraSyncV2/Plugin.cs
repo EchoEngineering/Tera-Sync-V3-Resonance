@@ -1,4 +1,4 @@
-﻿using Dalamud.Game.ClientState.Objects;
+using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.Command;
 using Dalamud.Interface.ImGuiFileDialog;
 using Dalamud.Interface.Windowing;
@@ -39,7 +39,7 @@ public sealed class Plugin : IDalamudPlugin
 {
     // Baked into TeraSync client at build time - identifies this fork in Resonance federation
     private const string FORK_IDENTIFIER = "TeraSync";
-    
+
     private readonly IHost _host;
     private readonly IDisposable? _resonance;
 
@@ -50,7 +50,7 @@ public sealed class Plugin : IDalamudPlugin
         ISigScanner sigScanner)
     {
         pluginLog.Information("[TeraSync] Plugin constructor started!");
-        
+
         if (!Directory.Exists(pluginInterface.ConfigDirectory.FullName))
             Directory.CreateDirectory(pluginInterface.ConfigDirectory.FullName);
         var traceDir = Path.Join(pluginInterface.ConfigDirectory.FullName, "tracelog");
@@ -264,19 +264,19 @@ public sealed class Plugin : IDalamudPlugin
         .Build();
 
         _ = _host.StartAsync();
-        
+
         // Initialize Resonance Federation
         _resonance = ResonanceSDK.Initialize(FORK_IDENTIFIER, pluginInterface, commandManager, pluginLog);
-        
+
         // Initialize hybrid authentication (PKI + bearer tokens)
-        _ = Task.Run(async () => await InitializeHybridAuthenticationAsync(pluginInterface, pluginLog));
+        _ = Task.Run(async () => await InitializeHybridAuthenticationAsync(pluginInterface, pluginLog).ConfigureAwait(false));
     }
 
     /// <summary>
     /// Initialize hybrid authentication for cross-fork user token minting.
     /// Loads PKI certificate and enables TeraSync users to get bearer tokens.
     /// </summary>
-    private async Task InitializeHybridAuthenticationAsync(IDalamudPluginInterface pluginInterface, IPluginLog pluginLog)
+    private static async Task InitializeHybridAuthenticationAsync(IDalamudPluginInterface pluginInterface, IPluginLog pluginLog)
     {
         try
         {
@@ -301,8 +301,8 @@ public sealed class Plugin : IDalamudPlugin
             }
 
             // Load PKI certificate for fork authentication
-            var certLoaded = await resonanceClient.LoadCertificateAsync(certPath, keyPath);
-            
+            var certLoaded = await resonanceClient.LoadCertificateAsync(certPath, keyPath).ConfigureAwait(false);
+
             if (certLoaded)
             {
                 pluginLog.Information("[TeraSync-Resonance] Hybrid authentication enabled - TeraSync can mint user tokens");
@@ -322,7 +322,7 @@ public sealed class Plugin : IDalamudPlugin
     /// Mint a bearer token for a TeraSync user to access cross-fork features.
     /// Call this when users need to search/sync with other forks.
     /// </summary>
-    public async Task<string?> MintUserTokenAsync(string userId, string userHandle, string? displayName = null)
+    public static async Task<string?> MintUserTokenAsync(string userId, string userHandle, string? displayName = null)
     {
         try
         {
@@ -330,10 +330,10 @@ public sealed class Plugin : IDalamudPlugin
             if (resonanceClient == null)
                 return null;
 
-            var result = await resonanceClient.MintUserTokenAsync(userId, userHandle, displayName);
+            var result = await resonanceClient.MintUserTokenAsync(userId, userHandle, displayName).ConfigureAwait(false);
             return result.Token;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Log but don't crash - graceful degradation
             return null;
