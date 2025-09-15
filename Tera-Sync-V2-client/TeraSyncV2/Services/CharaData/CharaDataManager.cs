@@ -313,6 +313,31 @@ public sealed partial class CharaDataManager : DisposableMediatorSubscriberBase
 
             await AddOrUpdateDto(result).ConfigureAwait(false);
 
+            // Publish to Resonance federation via IPC
+            try
+            {
+                var resonancePublish = _pluginInterface.GetIpcSubscriber<Dictionary<string, object>, bool>("Resonance.PublishData");
+                var playerChar = await _dalamudUtilService.GetPlayerCharacterAsync().ConfigureAwait(false);
+                var characterData = new Dictionary<string, object>
+                {
+                    ["UserId"] = result?.Id ?? "Unknown",
+                    ["CharacterName"] = playerChar?.Name?.ToString() ?? "Unknown",
+                    ["WorldName"] = playerChar?.CurrentWorld.Value.Name.ToString() ?? "Unknown",
+                    ["FileGamePaths"] = result?.FileGamePaths?.Select(fp => fp.GamePath).ToList() ?? new List<string>(),
+                    ["Source"] = "TeraSync",
+                    ["Timestamp"] = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                    ["DataHash"] = result?.Id ?? string.Empty
+                };
+
+                resonancePublish?.InvokeFunc(characterData);
+                Logger.LogDebug("Published character data to Resonance: {characterName} from {world}",
+                    characterData["CharacterName"], characterData["WorldName"]);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogWarning(ex, "Failed to publish character data to Resonance federation");
+            }
+
             return ("Created Character Data", true);
         });
     }
@@ -689,7 +714,7 @@ public sealed partial class CharaDataManager : DisposableMediatorSubscriberBase
                 var characterData = new Dictionary<string, object>
                 {
                     ["Id"] = res?.Id ?? updateDto.Id,
-                    ["FileGamePaths"] = updateDto.FileGamePaths,
+                    ["FileGamePaths"] = updateDto.FileGamePaths?.Select(fp => fp.GamePath).ToList() ?? new List<string>(),
                     ["Source"] = "TeraSync",
                     ["Timestamp"] = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
                 };
@@ -950,18 +975,28 @@ public sealed partial class CharaDataManager : DisposableMediatorSubscriberBase
         try
         {
             var resonancePublish = _pluginInterface.GetIpcSubscriber<Dictionary<string, object>, bool>("Resonance.PublishData");
+
+            // Get current player character for proper metadata
+            var playerChar = await _dalamudUtilService.GetPlayerCharacterAsync().ConfigureAwait(false);
+
             var characterData = new Dictionary<string, object>
             {
-                ["Id"] = res?.Id ?? baseUpdateDto.Id,
-                ["FileGamePaths"] = baseUpdateDto.FileGamePaths,
+                ["UserId"] = res?.Id ?? baseUpdateDto.Id,
+                ["CharacterName"] = playerChar?.Name?.ToString() ?? "Unknown",
+                ["WorldName"] = playerChar?.CurrentWorld.Value.Name.ToString() ?? "Unknown",
+                ["FileGamePaths"] = baseUpdateDto.FileGamePaths?.Select(fp => fp.GamePath).ToList() ?? new List<string>(),
                 ["Source"] = "TeraSync",
-                ["Timestamp"] = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+                ["Timestamp"] = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),
+                ["DataHash"] = baseUpdateDto.Id ?? string.Empty
             };
+
             resonancePublish?.InvokeFunc(characterData);
+            Logger.LogDebug("Published character data to Resonance federation");
         }
-        catch
+        catch (Exception ex)
         {
-            // Resonance not available, ignore
+            // Resonance not available or error, ignore silently
+            Logger.LogTrace(ex, "Failed to publish to Resonance (this is normal if Resonance is not installed)");
         }
     }
 
