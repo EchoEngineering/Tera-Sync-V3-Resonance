@@ -266,7 +266,8 @@ public sealed class Plugin : IDalamudPlugin
         _ = _host.StartAsync();
 
         // Initialize Resonance Federation
-        var logger = _host.Services.GetRequiredService<ILogger<Plugin>>();
+        var configService = _host.Services.GetRequiredService<TeraSyncConfigService>();
+        var logger = new DalamudLogger(nameof(ResonanceSDK), configService, pluginLog, gameData.HasModifiedGameDataFiles);
         _resonance = ResonanceSDK.Initialize(FORK_IDENTIFIER, pluginInterface, commandManager, logger);
 
         // Initialize hybrid authentication (PKI + bearer tokens)
