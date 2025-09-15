@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Authors>Echo Engineering</Authors>
     <Company>Echo Engineering</Company>
-    <Version>1.0.1.7</Version>
+    <Version>1.0.1.8</Version>
     <Description>Cross-fork sync using Resonance federation with simplified integration. Features user-selectable handles, clean empty states, automatic command registration, comprehensive settings, real-time sync, user-controlled permissions, cross-fork discovery, and streamlined request/approval workflow across Mare communities.</Description>
     <Copyright>Copyright © Echo Engineering 2025</Copyright>
     <PackageProjectUrl>https://github.com/EchoEngineering/TeraSyncV3-Resonance</PackageProjectUrl>
-    <AssemblyVersion>1.0.1.7</AssemblyVersion>
+    <AssemblyVersion>1.0.1.8</AssemblyVersion>
     <AssemblyName>TeraSyncV3</AssemblyName>
   </PropertyGroup>
 
@@ -42,7 +42,7 @@
     <PackageReference Include="NReco.Logging.File" Version="1.2.2" />
     <PackageReference Include="Penumbra.Api" Version="5.12.0" />
     <PackageReference Include="Penumbra.String" Version="1.0.5" />
-    <PackageReference Include="Resonance.SDK" Version="1.5.2" />
+    <PackageReference Include="Resonance.SDK" Version="1.6.0" />
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
     <PackageReference Include="SonarAnalyzer.CSharp" Version="10.7.0.110445">
       <PrivateAssets>all</PrivateAssets>
