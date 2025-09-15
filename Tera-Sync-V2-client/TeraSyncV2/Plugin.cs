@@ -266,7 +266,8 @@ public sealed class Plugin : IDalamudPlugin
         _ = _host.StartAsync();
 
         // Initialize Resonance Federation
-        _resonance = ResonanceSDK.Initialize(FORK_IDENTIFIER, pluginInterface, commandManager, pluginLog);
+        var logger = _host.Services.GetRequiredService<ILogger<Plugin>>();
+        _resonance = ResonanceSDK.Initialize(FORK_IDENTIFIER, pluginInterface, commandManager, logger);
 
         // Initialize hybrid authentication (PKI + bearer tokens)
         _ = Task.Run(async () => await InitializeHybridAuthenticationAsync(pluginInterface, pluginLog).ConfigureAwait(false));
