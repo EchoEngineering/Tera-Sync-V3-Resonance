@@ -119,9 +119,9 @@
       },
       "Resonance.SDK": {
         "type": "Direct",
-        "requested": "[1.6.3, )",
-        "resolved": "1.6.3",
-        "contentHash": "xjXaQCRXfS2rlwiUMDp5dPQeiO2oZRNMFj7HhD0KMpgZQWPiK3W2AELcnc3m+MTAHj57RDV2ep4RPXDHugD+og==",
+        "requested": "[1.6.4, )",
+        "resolved": "1.6.4",
+        "contentHash": "F+zfMOMSfQtVfUqzXEP9cIfkMcIOz2bdFdJP9f+H2k2ghQ1ZSKKOfI5ES7UFpZN8k/oEcYy8ftIDygCMgdYTng==",
         "dependencies": {
           "DalamudPackager": "13.0.0",
           "Dapper": "2.1.35",
@@ -129,7 +129,8 @@
           "MessagePack": "2.5.187",
           "Microsoft.Data.Sqlite": "9.0.0",
           "Refit": "7.2.22",
-          "System.IdentityModel.Tokens.Jwt": "8.14.0"
+          "System.IdentityModel.Tokens.Jwt": "8.14.0",
+          "System.Security.Cryptography.ProtectedData": "9.0.0"
         }
       },
       "SixLabors.ImageSharp": {
@@ -665,6 +666,11 @@
         "type": "Transitive",
         "resolved": "9.0.3",
         "contentHash": "Vs/C2V27bjtwLqYag9ATzHilcUn8VQTICre4jSBMGFUeSTxEZffTjb+xZwjcmPsVAjmSZmBI5N7Ezq8UFvqQQg=="
+      },
+      "System.Security.Cryptography.ProtectedData": {
+        "type": "Transitive",
+        "resolved": "9.0.0",
+        "contentHash": "CJW+x/F6fmRQ7N6K8paasTw9PDZp4t7G76UjGNlSDgoHPF0h08vTzLYbLZpOLEJSg35d5wy2jCXGo84EN05DpQ=="
       },
       "System.Threading.Channels": {
         "type": "Transitive",
