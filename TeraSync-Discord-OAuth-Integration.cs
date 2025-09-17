@@ -17,7 +17,7 @@ namespace TeraSyncV3.Resonance;
 public class TeraSyncDiscordIntegration
 {
     private readonly ILogger<TeraSyncDiscordIntegration> _logger;
-    private AuthenticatedResonanceClient? _resonanceClient;
+    private IResonanceClient? _resonanceClient;
     private AuthenticationUIIntegration? _authUI;
     private readonly object _teraSyncPlugin;
 
@@ -71,8 +71,8 @@ public class TeraSyncDiscordIntegration
 
             _logger.LogInformation("📋 TeraSync configuration prepared");
 
-            // Create authenticated Resonance client
-            _resonanceClient = new AuthenticatedResonanceClient(config, _logger);
+            // Create Resonance client with Discord authentication enabled
+            _resonanceClient = new ResonanceClient(config, _logger);
 
             // THE SACRED 3-LINE INTEGRATION (TeraSync proof of concept)
             _logger.LogInformation("🔥 Executing 3-line integration for TeraSync...");
@@ -83,7 +83,7 @@ public class TeraSyncDiscordIntegration
                 _logger.LogInformation("✅ TeraSync Discord OAuth integration successful!");
 
                 // Verify authentication worked
-                var authenticatedUser = await _resonanceClient.GetAuthenticatedUserAsync();
+                var authenticatedUser = _resonanceClient.GetCurrentUser();
                 if (authenticatedUser != null)
                 {
                     _logger.LogInformation("👤 TeraSync user authenticated:");
