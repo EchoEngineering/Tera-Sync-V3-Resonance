@@ -268,7 +268,18 @@ public sealed class Plugin : IDalamudPlugin
         // Initialize Resonance Federation
         var configService = _host.Services.GetRequiredService<TeraSyncConfigService>();
         var logger = new DalamudLogger("Resonance", configService, pluginLog, gameData.HasModifiedGameDataFiles);
-        _resonance = ResonanceSDK.Initialize(FORK_IDENTIFIER, pluginInterface, commandManager, logger);
+
+        // Create Resonance configuration from TeraSync settings
+        var resonanceConfig = new ResonanceConfig
+        {
+            // TeraSync uses federation mode (no Discord auth) - may change based on settings
+            EnableDiscordAuthentication = false,
+            AggregatorUrl = "https://aggregator.resonancesync.app",
+            DisplayName = FORK_IDENTIFIER,
+            Description = $"{FORK_IDENTIFIER} cross-fork synchronization via Resonance federation"
+        };
+
+        _resonance = ResonanceSDK.Initialize(FORK_IDENTIFIER, resonanceConfig, pluginInterface, commandManager, logger);
 
         // Initialize hybrid authentication (PKI + bearer tokens)
         _ = Task.Run(async () => await InitializeHybridAuthenticationAsync(pluginInterface, pluginLog).ConfigureAwait(false));
